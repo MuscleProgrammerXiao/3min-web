@@ -71,13 +71,13 @@ export default function Header() {
       variants={headerVariants}
       initial="hidden"
       animate="visible"
-      className="bg-white shadow-sm border-b sticky top-0 z-50 backdrop-blur-sm bg-white/95"
+      className="shadow-sm border-b border-white/20 fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/30"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <motion.div variants={itemVariants} className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+            <Link href="/" className="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors drop-shadow-sm">
               3min°
             </Link>
           </motion.div>
@@ -104,22 +104,22 @@ export default function Header() {
                       <motion.span
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full flex items-center"
+                        className="px-2 py-1 bg-red-100/90 text-red-800 text-xs rounded-full flex items-center backdrop-blur-sm"
                       >
                         <Shield className="h-3 w-3 mr-1" />
                         管理员
                       </motion.span>
                     )}
-                    <span className="text-sm text-gray-700">欢迎, {user?.name}</span>
+                    <span className="text-sm text-gray-800 font-medium drop-shadow-sm">欢迎, {user?.name}</span>
                   </div>
-                  <Button variant="outline" size="sm" onClick={logout} className="hover:scale-105 transition-transform">
+                  <Button variant="outline" size="sm" onClick={logout} className="hover:scale-105 transition-transform bg-white/80 backdrop-blur-sm border-gray-300">
                     <LogOut className="h-4 w-4 mr-2" />
                     退出
                   </Button>
                 </motion.div>
               ) : (
                 <Link href="/login">
-                  <Button variant="outline" size="sm" className="hover:scale-105 transition-transform">
+                  <Button variant="outline" size="sm" className="hover:scale-105 transition-transform bg-white/80 backdrop-blur-sm border-gray-300">
                     <User className="h-4 w-4 mr-2" />
                     登录
                   </Button>
@@ -127,7 +127,7 @@ export default function Header() {
               )
             ) : (
               <Link href="/login">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="bg-white/80 backdrop-blur-sm border-gray-300">
                   <User className="h-4 w-4 mr-2" />
                   登录
                 </Button>
@@ -139,7 +139,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="md:hidden"
+                className="md:hidden text-gray-800 hover:bg-white/50"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
               >
                 <motion.div
@@ -164,7 +164,7 @@ export default function Header() {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="md:hidden overflow-hidden"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/40 backdrop-blur-sm border-t border-white/30">
               <ShadcnNav items={navItems} orientation="vertical" />
             </div>
           </motion.div>
