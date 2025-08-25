@@ -5,11 +5,13 @@ import HeroSection from '@/components/sections/HeroSection'
 import AboutSection from '@/components/sections/AboutSection'
 import ChatBotSection from '@/components/sections/ChatBotSection'
 import ExperienceSection from '@/components/sections/ExperienceSection'
+import { useScrollToTop } from '@/lib/scrollToTop'
 
 export default function Home() {
+  const scrollToTopOnMount = useScrollToTop()
+  
   useEffect(() => {
-    // 页面加载时滚动到顶部
-    window.scrollTo(0, 0)
+    scrollToTopOnMount()
   }, [])
 
   return (
