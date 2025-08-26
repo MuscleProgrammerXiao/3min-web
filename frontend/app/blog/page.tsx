@@ -4,85 +4,8 @@ import { useState, useMemo } from 'react';
 import BlogCard from '@/components/blog/BlogCard';
 import BlogSearch from '@/components/blog/BlogSearch';
 import BlogPagination from '@/components/blog/BlogPagination';
-import { BlogPost, BlogCategory } from '@/lib/types/blog';
-
-// 模拟博客数据
-const mockPosts: BlogPost[] = [
-  {
-    id: 1,
-    title: 'Next.js 15 新特性解析',
-    excerpt: '深入了解 Next.js 15 带来的新功能和改进，包括性能优化和开发体验提升。探索新的编译器、改进的路由系统以及更好的开发者工具。',
-    date: '2024-01-15',
-    readTime: '5 分钟',
-    category: '技术',
-    tags: ['Next.js', 'React', '前端'],
-    slug: 'nextjs-15-features',
-    author: '3min',
-    published: true
-  },
-  {
-    id: 2,
-    title: 'React 状态管理最佳实践',
-    excerpt: '探讨在现代 React 应用中如何选择和使用合适的状态管理方案。从 useState 到 Zustand，从 Context 到 Redux Toolkit。',
-    date: '2024-01-10',
-    readTime: '8 分钟',
-    category: '技术',
-    tags: ['React', 'JavaScript', '状态管理'],
-    slug: 'react-state-management',
-    author: '3min',
-    published: true
-  },
-  {
-    id: 3,
-    title: '个人网站开发心得',
-    excerpt: '分享从设计到开发完成个人网站的全过程和经验总结。包括技术选型、设计思路、开发流程和部署优化。',
-    date: '2024-01-05',
-    readTime: '6 分钟',
-    category: '分享',
-    tags: ['网站开发', '心得', '设计'],
-    slug: 'personal-website-development',
-    author: '3min',
-    published: true
-  },
-  {
-    id: 4,
-    title: 'TypeScript 进阶技巧',
-    excerpt: 'TypeScript 的高级特性和实用技巧，帮助你写出更安全、更优雅的代码。包括泛型、条件类型、映射类型等。',
-    date: '2024-01-01',
-    readTime: '10 分钟',
-    category: '技术',
-    tags: ['TypeScript', 'JavaScript', '前端'],
-    slug: 'typescript-advanced-tips',
-    author: '3min',
-    published: true
-  },
-  {
-    id: 5,
-    title: '生活中的编程思维',
-    excerpt: '如何将编程思维应用到生活中，提高解决问题的效率和质量。从算法思维到系统设计，从调试到优化。',
-    date: '2023-12-28',
-    readTime: '7 分钟',
-    category: '生活',
-    tags: ['思维', '生活', '心得'],
-    slug: 'programming-mindset-in-life',
-    author: '3min',
-    published: true
-  },
-  {
-    id: 6,
-    title: 'CSS Grid 布局完全指南',
-    excerpt: '全面掌握 CSS Grid 布局系统，从基础概念到高级应用。包括网格容器、网格项目、对齐方式等核心概念。',
-    date: '2023-12-25',
-    readTime: '12 分钟',
-    category: '技术',
-    tags: ['CSS', '布局', '前端'],
-    slug: 'css-grid-complete-guide',
-    author: '3min',
-    published: true
-  }
-];
-
-const POSTS_PER_PAGE = 4;
+import {  BlogCategory } from '@/lib/types/blog';
+import { mockPosts, BLOG_CONFIG } from '@/lib/mock/blog';
 
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -108,9 +31,9 @@ export default function BlogPage() {
   }, [searchQuery, selectedCategory, selectedTags]);
 
   // 分页逻辑
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
-  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
-  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+  const totalPages = Math.ceil(filteredPosts.length / BLOG_CONFIG.POSTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * BLOG_CONFIG.POSTS_PER_PAGE;
+  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + BLOG_CONFIG.POSTS_PER_PAGE);
 
   // 重置页码当过滤条件改变时
   const handleSearch = (query: string) => {
