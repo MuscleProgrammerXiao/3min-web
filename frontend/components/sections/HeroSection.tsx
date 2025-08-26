@@ -5,7 +5,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { AnimatedSection } from '@/components/animations/AnimatedSection'
+import { AnimatedSection } from '@/components/common'
+import { ANIMATION_DURATION, ANIMATION_EASING } from '@/lib/constants/animations'
 
 // 性能优化的动画配置
 const useOptimizedAnimation = () => {
@@ -19,8 +20,8 @@ const useOptimizedAnimation = () => {
   }, [])
   
   return useMemo(() => ({
-    duration: isMobile ? 0.3 : 0.6,
-    ease: "easeOut" as const
+    duration: isMobile ? ANIMATION_DURATION.fast : ANIMATION_DURATION.medium,
+    ease: ANIMATION_EASING.easeOut
   }), [isMobile])
 }
 

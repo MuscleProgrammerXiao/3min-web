@@ -59,7 +59,7 @@ const mockPosts: BlogPost[] = [
   {
     id: 5,
     title: '生活中的编程思维',
-    excerpt: '如何将编程思维应用到日常生活中，提高解决问题的效率和质量。从算法思维到系统设计，从调试到优化。',
+    excerpt: '如何将编程思维应用到生活中，提高解决问题的效率和质量。从算法思维到系统设计，从调试到优化。',
     date: '2023-12-28',
     readTime: '7 分钟',
     category: '生活',
@@ -129,7 +129,7 @@ export default function BlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-16">
+    <div className="min-h-screen bg-gray-50 pt-22 md:pt-22">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
@@ -141,7 +141,7 @@ export default function BlogPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
           {/* 侧边栏 - 搜索和过滤 */}
-          <div className="lg:col-span-1 order-2 lg:order-1">
+          <div className="lg:col-span-1 order-1 lg:order-1">
             <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 lg:sticky lg:top-8">
               <h2 className="text-lg font-semibold mb-4">搜索与过滤</h2>
               <BlogSearch
@@ -156,7 +156,7 @@ export default function BlogPage() {
           </div>
 
           {/* 主内容区 */}
-          <div className="lg:col-span-3 order-1 lg:order-2">
+          <div className="lg:col-span-3 order-2 lg:order-2">
             {/* 结果统计 */}
             <div className="mb-4 md:mb-6">
               <p className="text-gray-600 text-sm md:text-base">
@@ -185,7 +185,7 @@ export default function BlogPage() {
 
             {/* 分页 */}
             {filteredPosts.length > 0 && (
-              <div className="mt-8">
+              <div className="my-10">
                 <BlogPagination
                   currentPage={currentPage}
                   totalPages={totalPages}

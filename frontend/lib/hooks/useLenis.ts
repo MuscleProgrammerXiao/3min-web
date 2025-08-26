@@ -2,20 +2,23 @@
 
 import { useEffect } from 'react'
 import Lenis from '@studio-freight/lenis'
+import { ANIMATION_DURATION } from '../constants/animations'
 
+/**
+ * React Hook: Lenis 平滑滚动管理
+ * 初始化和管理 Lenis 平滑滚动实例
+ */
 export function useLenis() {
   useEffect(() => {
-    // 初始化 Lenis
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      direction: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
+        duration: ANIMATION_DURATION.slow,
+        orientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        syncTouch: false, // 移动端使用原生滚动，性能更好
+        touchMultiplier: 2,
+        infinite: false,
+        gestureOrientation: 'vertical',
     })
 
     // 将lenis实例挂载到window对象上，方便其他地方调用

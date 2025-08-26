@@ -10,7 +10,7 @@ import { PageTransition } from "@/components/animations/PageTransition"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "3min°--个人网站",
+  title: "个人网站",
   description: "一个简洁的个人网站，展示个人信息、项目经历和技术技能。",
 }
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useState } from 'react'
+import { LoadingSpinner } from '@/components/common'
 
 interface HydrationProviderProps {
   children: ReactNode
@@ -14,10 +15,10 @@ export function HydrationProvider({ children }: HydrationProviderProps) {
   }, [])
 
   if (!isHydrated) {
-    // 服务端渲染时显示加载状态或骨架屏
+    // 使用新的通用LoadingSpinner组件
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <LoadingSpinner size="lg" />
       </div>
     )
   }

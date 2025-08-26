@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { Calendar, MapPin, Briefcase, GraduationCap } from 'lucide-react'
-import { AnimatedSection } from '@/components/animations/AnimatedSection'
+import { AnimatedSection } from '@/components/common'
 import { useRouter } from 'next/navigation'
+import { ANIMATION_DURATION, ANIMATION_EASING, STAGGER_DELAY } from '@/lib/constants/animations'
 
 interface ExperienceItem {
   id: string
@@ -290,7 +291,7 @@ export default function ExperienceSection() {
   return (
     <section className="py-16 lg:py-24 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" id="experience">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection animation="fade-in">
+        <AnimatedSection>
           <div className="text-center mb-16 lg:mb-20">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -304,7 +305,7 @@ export default function ExperienceSection() {
             </motion.div>
             
             <motion.h2 
-              className="text-4xl lg:text-6xl font-bold text-gray-800 mb-6 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
+              className="text-4xl lg:text-6xl font-bold text-gray-800 mb-6 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

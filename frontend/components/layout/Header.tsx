@@ -4,22 +4,28 @@ import Link from 'next/link'
 import { useGlobalStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { Menu, X, User, LogOut, Shield } from 'lucide-react'
-import { useHydration } from '@/lib/useHydration'
+import { useHydration } from '@/lib/hooks'
 import { ShadcnNav } from '@/components/layout/ShadcnNav'
 import { motion, Transition } from 'framer-motion'
 import { useMemo } from 'react'
+import { STAGGER_DELAY } from '@/lib/constants/animations'
 
 type CustomTransition = Transition & {
   staggerChildren?: number;
   delayChildren?: number;
 };
+interface BaseItem {
+  href: string;
+  label: string;
+  className?: string;
+}
 export default function Header() {
   const hydrated = useHydration()
   const { sidebarOpen, setSidebarOpen, isAuthenticated, user, logout, isAdmin } = useGlobalStore()
 
   // 动态生成导航项，包含管理后台
   const navItems = useMemo(() => {
-    const baseItems = [
+    const baseItems:BaseItem[] = [
       { href: '/', label: '主页' },
       { href: '/portfolio', label: '作品' },
       { href: '/blog', label: '博客' },
@@ -47,8 +53,8 @@ export default function Header() {
         type: 'spring',
         stiffness: 300,
         damping: 30,
-        staggerChildren: 0.1,
-        delayChildren: 0.1
+        staggerChildren: STAGGER_DELAY.normal,
+        delayChildren: STAGGER_DELAY.fast
       } satisfies CustomTransition
     }
   }
@@ -64,6 +70,11 @@ export default function Header() {
         damping: 20
       } satisfies CustomTransition
     }
+  }
+
+  // 处理移动端导航项点击事件
+  const handleMobileNavClick = () => {
+    setSidebarOpen(false)
   }
 
   return (
@@ -165,7 +176,11 @@ export default function Header() {
             className="md:hidden overflow-hidden"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/40 backdrop-blur-sm border-t border-white/30">
-              <ShadcnNav items={navItems} orientation="vertical" />
+              <ShadcnNav 
+                items={navItems} 
+                orientation="vertical" 
+                onItemClick={handleMobileNavClick} // 传递关闭菜单的回调函数
+              />
             </div>
           </motion.div>
         )}

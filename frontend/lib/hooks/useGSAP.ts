@@ -3,12 +3,17 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ANIMATION_DURATION, GSAP_EASING, STAGGER_DELAY } from '../constants/animations'
 
 // 注册 ScrollTrigger 插件
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
+/**
+ * React Hook: GSAP 动画管理
+ * 提供常用的滚动触发动画效果
+ */
 export function useGSAP() {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -22,8 +27,9 @@ export function useGSAP() {
         { 
           opacity: 1, 
           y: 0, 
-          duration: 1,
-          stagger: 0.2,
+          duration: ANIMATION_DURATION.medium,
+          stagger: STAGGER_DELAY.medium,
+          ease: GSAP_EASING.easeOut,
           scrollTrigger: {
             trigger: '.fade-in',
             start: 'top 80%',
@@ -39,7 +45,8 @@ export function useGSAP() {
         {
           opacity: 1,
           x: 0,
-          duration: 1,
+          duration: ANIMATION_DURATION.medium,
+          ease: GSAP_EASING.easeOut,
           scrollTrigger: {
             trigger: '.slide-in-left',
             start: 'top 80%',
@@ -53,7 +60,8 @@ export function useGSAP() {
         {
           opacity: 1,
           x: 0,
-          duration: 1,
+          duration: ANIMATION_DURATION.medium,
+          ease: GSAP_EASING.easeOut,
           scrollTrigger: {
             trigger: '.slide-in-right',
             start: 'top 80%',
@@ -68,7 +76,8 @@ export function useGSAP() {
         {
           opacity: 1,
           scale: 1,
-          duration: 1,
+          duration: ANIMATION_DURATION.medium,
+          ease: GSAP_EASING.easeOut,
           scrollTrigger: {
             trigger: '.scale-in',
             start: 'top 80%',

@@ -157,7 +157,33 @@
 
 /* 性能优化的动画类 */
 .animate-optimized {
-  will-change: transform, opacity;
+  /* 添加到全局CSS中 */
+  .project-card {
+    will-change: transform, opacity;
+    transform: translateZ(0); /* 启用硬件加速 */
+  }
+  
+  .project-card:hover {
+    transform: translateY(-4px) translateZ(0);
+  }
+  
+  /* 优化动画性能 */
+  @media (prefers-reduced-motion: reduce) {
+    .project-card {
+      transition: none;
+    }
+    
+    .project-card * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* 提升渲染性能 */
+  .projects-grid {
+    contain: layout style paint;
+  }
   transform: translateZ(0);
 }
 

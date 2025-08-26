@@ -22,9 +22,10 @@ interface ShadcnNavProps {
   items: NavItem[]
   className?: string
   orientation?: 'horizontal' | 'vertical'
+  onItemClick?: () => void // 新增：点击导航项的回调函数
 }
 
-export function ShadcnNav({ items, className, orientation = 'horizontal' }: ShadcnNavProps) {
+export function ShadcnNav({ items, className, orientation = 'horizontal', onItemClick }: ShadcnNavProps) {
   const pathname = usePathname()
 
   const containerVariants = {
@@ -66,6 +67,7 @@ export function ShadcnNav({ items, className, orientation = 'horizontal' }: Shad
             <motion.div key={item.href} variants={itemVariants}>
               <Link
                 href={item.href}
+                onClick={onItemClick} // 添加点击事件处理
                 className={cn(
                   'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
                   'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500',

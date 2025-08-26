@@ -13,17 +13,28 @@ const ChatBotSection = () => {
   const [isTyping, setIsTyping] = useState(false)
   const [showWelcome, setShowWelcome] = useState(true)
   const [isInView, setIsInView] = useState(false)
+  const [isPageInitialized, setIsPageInitialized] = useState(false)
   
   const inputRef = useRef<HTMLInputElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
+
+  // 页面初始化检测
+  useEffect(() => {
+    // 等待页面完全加载和初始滚动完成
+    const initTimer = setTimeout(() => {
+      setIsPageInitialized(true)
+    }, 1000) // 给足够时间让 useScrollToTop 完成
+
+    return () => clearTimeout(initTimer)
+  }, [])
 
   // 滚动监听和自动聚焦
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting)
-        // 当组件进入视口时自动聚焦输入框
-        if (entry.isIntersecting && inputRef.current) {
+        // 只有在页面初始化完成后才自动聚焦输入框
+        if (entry.isIntersecting && inputRef.current && isPageInitialized) {
           // 延迟聚焦，确保动画完成
           setTimeout(() => {
             inputRef.current?.focus()
@@ -45,11 +56,11 @@ const ChatBotSection = () => {
         observer.unobserve(sectionRef.current)
       }
     }
-  }, [])
+  }, [isPageInitialized]) // 添加 isPageInitialized 依赖
 
-  // 保持输入框聚焦（当组件在视口内时）
+  // 保持输入框聚焦（当组件在视口内且页面已初始化时）
   useEffect(() => {
-    if (isInView && inputRef.current && !isTyping) {
+    if (isInView && isPageInitialized && inputRef.current && !isTyping) {
       const handleFocus = () => {
         if (document.activeElement !== inputRef.current) {
           inputRef.current?.focus()
@@ -77,7 +88,7 @@ const ChatBotSection = () => {
         clearInterval(focusInterval)
       }
     }
-  }, [isInView, isTyping])
+  }, [isInView, isTyping, isPageInitialized]) // 添加 isPageInitialized 依赖
 
   // 打字机效果
   const typeWriter = useCallback(async (text: string) => {
@@ -90,13 +101,13 @@ const ChatBotSection = () => {
     }
     
     setIsTyping(false)
-    // 打字完成后重新聚焦输入框
+    // 打字完成后重新聚焦输入框（只有在页面已初始化时）
     setTimeout(() => {
-      if (isInView && inputRef.current) {
+      if (isInView && isPageInitialized && inputRef.current) {
         inputRef.current.focus()
       }
     }, 200)
-  }, [isInView])
+  }, [isInView, isPageInitialized])
 
   const handleSubmit = useCallback(async (message: string) => {
     setShowWelcome(false)

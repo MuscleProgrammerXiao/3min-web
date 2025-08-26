@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +28,7 @@ export default function BlogSearch({
   searchQuery = ''
 }: BlogSearchProps) {
   const [query, setQuery] = useState(searchQuery);
+  const [isTagsExpanded, setIsTagsExpanded] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,37 +85,56 @@ export default function BlogSearch({
         )}
       </form>
 
-      {/* 分类过滤 */}
-      <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3">分类</h3>
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <Badge
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              className="cursor-pointer hover:bg-primary/10"
-              onClick={() => handleCategoryClick(category)}
-            >
-              {category}
-            </Badge>
-          ))}
+      {/* 分类和标签 - 移动端同一行，桌面端分开 */}
+      <div className="space-y-4 lg:space-y-6">
+        {/* 分类和标签标题行 - 移动端 */}
+        <div className="flex items-center justify-between lg:hidden">
+          <h3 className="text-sm font-medium text-gray-700">分类</h3>
+          <button
+            onClick={() => setIsTagsExpanded(!isTagsExpanded)}
+            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900"
+          >
+            标签
+            {isTagsExpanded ? (
+              <ChevronUp className="ml-1 h-4 w-4" />
+            ) : (
+              <ChevronDown className="ml-1 h-4 w-4" />
+            )}
+          </button>
         </div>
-      </div>
 
-      {/* 标签过滤 */}
-      <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3">标签</h3>
-        <div className="flex flex-wrap gap-2">
-          {availableTags.map((tag) => (
-            <Badge
-              key={tag}
-              variant={selectedTags.includes(tag) ? "default" : "outline"}
-              className="cursor-pointer hover:bg-primary/10"
-              onClick={() => handleTagClick(tag)}
-            >
-              {tag}
-            </Badge>
-          ))}
+        {/* 分类过滤 */}
+        <div className="lg:space-y-3">
+          <h3 className="hidden lg:block text-sm font-medium text-gray-700 mb-3">分类</h3>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <Badge
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                className="cursor-pointer hover:bg-primary/10"
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* 标签过滤 */}
+        <div className={`lg:space-y-3 ${!isTagsExpanded ? 'hidden lg:block' : ''}`}>
+          <h3 className="hidden lg:block text-sm font-medium text-gray-700 mb-3">标签</h3>
+          <div className="flex flex-wrap gap-2">
+            {availableTags.map((tag) => (
+              <Badge
+                key={tag}
+                variant={selectedTags.includes(tag) ? "default" : "outline"}
+                className="cursor-pointer hover:bg-primary/10"
+                onClick={() => handleTagClick(tag)}
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
         </div>
       </div>
 
