@@ -24,7 +24,8 @@ export function AnimatedSection({
   margin = '-100px' // 默认值
 }: AnimatedSectionProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once, margin }) // 改为 rootMargin
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isInView = useInView(ref, { once }) // 改为 rootMargin
 
   return (
     <motion.section
