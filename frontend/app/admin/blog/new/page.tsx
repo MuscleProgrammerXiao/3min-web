@@ -31,7 +31,7 @@ import {
   X,
   FileText
 } from 'lucide-react';
-import { BlogPost } from '@/lib/types/blog';
+import { BlogPost,BlogCategory } from '@/lib/types/blog';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
@@ -58,7 +58,7 @@ export default function NewBlogPage() {
     }
   }, [isAuthenticated, isAdmin, router]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | boolean | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -94,7 +94,7 @@ export default function NewBlogPage() {
         title: formData.title,
         excerpt: formData.excerpt,
         content: formData.content,
-        category: formData.category,
+        category: formData.category as BlogCategory,
         tags: formData.tags,
         slug: generateSlug(formData.title),
         author: user?.name || '3min',

@@ -26,7 +26,7 @@ export const scrollToTop = (options: ScrollOptions = {}) => {
   document.body.scrollTop = 0
   
   // Lenis滚动支持
-  const lenisInstance = (window as any).lenis
+  const lenisInstance = (window as { lenis?: { scrollTo: (target: number, options?: { immediate?: boolean }) => void } }).lenis
   if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
     lenisInstance.scrollTo(0, { immediate })
   }

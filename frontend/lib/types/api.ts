@@ -1,5 +1,5 @@
 // API 响应基础类型
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;
@@ -10,7 +10,7 @@ export interface ApiResponse<T = any> {
 export interface RequestConfig extends RequestInit {
   timeout?: number;
   baseURL?: string;
-  params?: Record<string, any>;
+  params?: Record<string, string | number | boolean>;
 }
 
 // HTTP 方法类型

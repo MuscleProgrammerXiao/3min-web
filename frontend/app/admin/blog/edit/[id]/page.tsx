@@ -63,7 +63,7 @@ interface EditBlogPageProps {
 export default function EditBlogPage({ params }: EditBlogPageProps) {
   const { id } = use(params);
   const router = useRouter();
-  const { isAuthenticated, isAdmin, user } = useGlobalStore();
+  const { isAuthenticated, isAdmin } = useGlobalStore();
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
@@ -110,7 +110,7 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
     loadBlogPost();
   }, [id, isAuthenticated, isAdmin, router]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | boolean | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -135,7 +135,7 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
     setIsSaving(true);
     
     try {
-      const updatedPost: Partial<BlogPost> = {
+      const updatedPost = {
         ...formData,
         readTime: `${Math.ceil(formData.content.length / 500)} 分钟`,
         published: publish || formData.published

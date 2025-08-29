@@ -325,7 +325,7 @@ export default function AdminBlogPage() {
             <AlertDialogHeader>
               <AlertDialogTitle>确认删除</AlertDialogTitle>
               <AlertDialogDescription>
-                您确定要删除文章 "{postToDelete?.title}" 吗？此操作无法撤销。
+                您确定要删除文章 &quot;{postToDelete?.title}&quot; 吗？此操作无法撤销。
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

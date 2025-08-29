@@ -86,7 +86,7 @@ export default function BlogPage() {
                 找到 <span className="font-semibold text-gray-900">{filteredPosts.length}</span> 篇文章
                 {searchQuery && (
                   <span className="ml-2">
-                    关于 "<span className="font-semibold">{searchQuery}</span>"
+                    关于 &quot;<span className="font-semibold">{searchQuery}</span>&quot;
                   </span>
                 )}
               </p>

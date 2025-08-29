@@ -149,7 +149,7 @@ class HttpClient {
   }
 
   // POST 请求
-  async post<T = any>(url: string, data?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
+  async post<T = unknown>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> {
     return this.request<T>('POST', url, {
       ...config,
       body: data ? JSON.stringify(data) : undefined,
@@ -157,7 +157,7 @@ class HttpClient {
   }
 
   // PUT 请求
-  async put<T = any>(url: string, data?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
+  async put<T = unknown>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> {
     return this.request<T>('PUT', url, {
       ...config,
       body: data ? JSON.stringify(data) : undefined,
@@ -170,7 +170,7 @@ class HttpClient {
   }
 
   // PATCH 请求
-  async patch<T = any>(url: string, data?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
+  async patch<T = unknown>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> {
     return this.request<T>('PATCH', url, {
       ...config,
       body: data ? JSON.stringify(data) : undefined,
