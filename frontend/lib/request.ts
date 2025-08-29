@@ -9,7 +9,7 @@ const DEFAULT_CONFIG: RequestConfig = {
   },
 };
 
-// 请求错误类
+// HTTP错误类
 class HttpError extends Error implements RequestError {
   code?: number;
   status?: number;
@@ -23,7 +23,7 @@ class HttpError extends Error implements RequestError {
   }
 }
 
-// 网络请求类
+// HTTP客户端类
 class HttpClient {
   private baseURL: string;
   private defaultHeaders: HeadersInit;
@@ -36,7 +36,7 @@ class HttpClient {
   }
 
   // 构建完整URL
-  private buildURL(url: string, params?: Record<string, any>): string {
+  private buildURL(url: string, params?: Record<string, unknown>): string {
     const fullURL = url.startsWith('http') ? url : `${this.baseURL}${url}`;
     
     if (!params) return fullURL;
@@ -85,53 +85,52 @@ class HttpClient {
     try {
       const data = await response.json();
       return data as ApiResponse<T>;
-    } catch (error) {
+    } catch {
       throw new HttpError('响应数据解析失败', response.status, response);
     }
   }
 
   // 通用请求方法
-  private async request<T = any>(
+  private async request<T = unknown>(
     method: HttpMethod,
     url: string,
     config: RequestConfig = {}
   ): Promise<ApiResponse<T>> {
     try {
       // 应用请求拦截器
-      const finalConfig = await this.requestInterceptor({
-        ...config,
+      const processedConfig = await this.requestInterceptor(config);
+      
+      // 构建请求URL
+      const requestURL = this.buildURL(url, processedConfig.params);
+      
+      // 构建请求选项
+      const requestOptions: RequestInit = {
         method,
         headers: {
           ...this.defaultHeaders,
-          ...config.headers,
+          ...processedConfig.headers,
         },
-      });
-
-      // 构建URL
-      const finalURL = this.buildURL(url, finalConfig.params);
+        body: processedConfig.body,
+      };
 
       // 创建AbortController用于超时控制
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+      requestOptions.signal = controller.signal;
 
       try {
-        const response = await fetch(finalURL, {
-          ...finalConfig,
-          signal: controller.signal,
-        });
-
+        // 发送请求
+        const response = await fetch(requestURL, requestOptions);
         clearTimeout(timeoutId);
+        
+        // 应用响应拦截器
         return await this.responseInterceptor<T>(response);
-      } catch (error) {
+      } catch (fetchError) {
         clearTimeout(timeoutId);
-        
-        if (error instanceof Error && error.name === 'AbortError') {
-          throw new HttpError('请求超时', 408);
-        }
-        
-        throw error;
+        throw fetchError;
       }
     } catch (error) {
+      // 统一错误处理
       if (error instanceof HttpError) {
         throw error;
       }
@@ -144,7 +143,7 @@ class HttpClient {
   }
 
   // GET 请求
-  async get<T = any>(url: string, config?: RequestConfig): Promise<ApiResponse<T>> {
+  async get<T = unknown>(url: string, config?: RequestConfig): Promise<ApiResponse<T>> {
     return this.request<T>('GET', url, config);
   }
 
@@ -165,7 +164,7 @@ class HttpClient {
   }
 
   // DELETE 请求
-  async delete<T = any>(url: string, config?: RequestConfig): Promise<ApiResponse<T>> {
+  async delete<T = unknown>(url: string, config?: RequestConfig): Promise<ApiResponse<T>> {
     return this.request<T>('DELETE', url, config);
   }
 
@@ -178,9 +177,9 @@ class HttpClient {
   }
 }
 
-// 创建默认实例
+// 导出默认实例
 export const http = new HttpClient();
 
-// 导出类和错误类型
+// 导出类和类型
 export { HttpClient, HttpError };
-export type { ApiResponse, RequestConfig, RequestError };
+export type { ApiResponse, RequestConfig, HttpMethod, RequestError };

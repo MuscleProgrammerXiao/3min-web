@@ -8,8 +8,6 @@ import {
   Camera, 
   Mountain,
   Database,
-  Smartphone,
-  BarChart3,
   Figma
 } from 'lucide-react'
 

@@ -9,7 +9,7 @@ interface SkillCardProps {
   isInView: boolean
 }
 
-const SkillCard = ({ skill, index, isInView }: SkillCardProps) => {
+const SkillCard = ({ skill, index }: SkillCardProps) => {
   const IconComponent = skill.icon
 
   return (
