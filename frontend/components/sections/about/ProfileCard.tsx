@@ -21,7 +21,7 @@ const ProfileCard = () => {
 
       {/* 个人信息卡片 */}
       <motion.div 
-        variants={itemVariants as any} 
+        variants={itemVariants} 
         className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center"
       >
         {/* 头像部分 */}

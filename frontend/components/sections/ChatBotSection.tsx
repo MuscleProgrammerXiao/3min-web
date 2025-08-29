@@ -33,27 +33,18 @@ const ChatBotSection = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting)
-        // 只有在页面初始化完成后才自动聚焦输入框
-        if (entry.isIntersecting && inputRef.current && isPageInitialized) {
-          // 延迟聚焦，确保动画完成
-          setTimeout(() => {
-            inputRef.current?.focus()
-          }, 500)
-        }
       },
-      {
-        threshold: 0.3, // 当30%的组件可见时触发
-        rootMargin: '-50px 0px -50px 0px' // 提前触发
-      }
+      { threshold: 0.1 }
     )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+  
+    const currentSection = sectionRef.current // 保存当前ref值
+    if (currentSection) {
+      observer.observe(currentSection)
     }
-
+  
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
+      if (currentSection) { // 使用保存的ref值
+        observer.unobserve(currentSection)
       }
     }
   }, [isPageInitialized]) // 添加 isPageInitialized 依赖

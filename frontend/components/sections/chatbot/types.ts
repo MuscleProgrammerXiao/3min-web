@@ -6,7 +6,7 @@ export interface ChatMessage {
 }
 
 export interface AnimatedIconProps {
-  icon: any
+  icon: React.ReactNode
   className: string
   delay?: number
 }

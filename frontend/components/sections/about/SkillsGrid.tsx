@@ -10,7 +10,7 @@ interface SkillsGridProps {
 
 const SkillsGrid = ({ isInView }: SkillsGridProps) => {
   return (
-    <motion.div variants={itemVariants as any} className="space-y-6 md:space-y-8">
+    <motion.div variants={itemVariants } className="space-y-6 md:space-y-8">
       <div className="text-center space-y-3">
         <motion.h3 
           className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"

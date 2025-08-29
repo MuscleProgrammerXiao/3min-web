@@ -14,7 +14,7 @@ const SkillCard = ({ skill, index, isInView }: SkillCardProps) => {
 
   return (
     <motion.div
-      variants={skillCardVariants as any}
+      variants={skillCardVariants}
       custom={index}
       whileHover={{ 
         y: -4, 

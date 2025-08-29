@@ -284,7 +284,7 @@ export default function ExperienceSection() {
       transition: {
         duration: 0.6,
         ease: 'easeOut'
-      }as any
+      }as const
     }
   }
   return (

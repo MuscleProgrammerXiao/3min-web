@@ -16,10 +16,10 @@ export interface Interest {
   gradient: string
 }
 
-export interface AnimationVariants {
-  containerVariants: any
-  itemVariants: any
-  skillCardVariants: any
-  progressVariants: any
-  interestVariants: any
-}
+// export interface AnimationVariants {
+//   containerVariants: any
+//   itemVariants: any
+//   skillCardVariants: any
+//   progressVariants: any
+//   interestVariants: any
+// }
