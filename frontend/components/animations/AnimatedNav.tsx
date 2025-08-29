@@ -40,7 +40,7 @@ export function AnimatedNav({ items, className, orientation = 'horizontal' }: An
         type: 'spring',
         stiffness: 300,
         damping: 24
-      }
+      }as const
     }
   }
 
