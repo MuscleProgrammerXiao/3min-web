@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { Calendar, MapPin, Briefcase, GraduationCap } from 'lucide-react'
 import { AnimatedSection } from '@/components/common'
 import { useRouter } from 'next/navigation'
-import { ANIMATION_DURATION, ANIMATION_EASING, STAGGER_DELAY } from '@/lib/constants/animations'
 
 interface ExperienceItem {
   id: string
@@ -351,7 +350,7 @@ export default function ExperienceSection() {
           <motion.div variants={itemVariants} className="text-center">
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 shadow-lg max-w-2xl mx-auto border border-gray-100 dark:border-slate-700">
               <h3 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-white mb-3 md:mb-4">
-                让我们一起创造些什么吧！
+                我们一起创造些什么吧！
               </h3>
               <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4 md:mb-6">
                 如果您有有趣的项目想法，或者想要合作，随时欢迎联系我。

@@ -61,10 +61,11 @@ export default function ContactPage() {
           message: result.message
         })
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : '网络错误，请检查后端服务是否启动'
       setSubmitStatus({
         type: 'error',
-        message: error.message || '网络错误，请检查后端服务是否启动'
+        message: errorMessage
       })
     } finally {
       setIsSubmitting(false)

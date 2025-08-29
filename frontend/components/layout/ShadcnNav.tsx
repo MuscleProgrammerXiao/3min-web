@@ -48,7 +48,7 @@ export function ShadcnNav({ items, className, orientation = 'horizontal', onItem
         type: 'spring',
         stiffness: 300,
         damping: 24
-      } as any
+      } as const
     }
   }
 

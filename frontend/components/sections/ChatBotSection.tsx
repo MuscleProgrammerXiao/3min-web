@@ -134,7 +134,7 @@ const ChatBotSection = () => {
           className="space-y-8 md:space-y-12"
         >
           {/* 标题区域 */}
-          <motion.div variants={itemVariants as any} className="text-center">
+          <motion.div variants={itemVariants} className="text-center">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white mb-4">
               通过我的智能体了解更多关于我
             </h2>
@@ -144,7 +144,7 @@ const ChatBotSection = () => {
           </motion.div>
           
           {/* AI对话区域 */}
-          <motion.div variants={itemVariants as any} className="max-w-3xl mx-auto">
+          <motion.div variants={itemVariants} className="max-w-3xl mx-auto">
             {/* 对话显示区域 */}
             <div className="min-h-[250px] md:min-h-[300px] mb-4 md:mb-6">
               <AnimatePresence mode="wait">

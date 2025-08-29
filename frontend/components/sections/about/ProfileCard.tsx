@@ -3,13 +3,15 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { itemVariants } from './animations'
 
+
+
 const ProfileCard = () => {
   return (
-    <motion.div variants={itemVariants as any} className="space-y-8">
+    <motion.div variants={itemVariants} className="space-y-8">
       {/* 关于我标题 */}
       <motion.div 
         className="text-center"
-        variants={itemVariants as any}
+        variants={itemVariants}
       >
         <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
           关于我
@@ -69,7 +71,7 @@ const ProfileCard = () => {
               户外运动让我保持活力，阅读让我不断成长。
             </p>
             <p>
-              我相信技术应该服务于人，让生活变得更美好。
+              我相信技术应该服务于人，让生活变得更好。
               如果你也有这样的想法，我们一定会有很多共同话题！
             </p>
           </div>
