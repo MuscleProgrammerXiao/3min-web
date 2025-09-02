@@ -1,58 +1,60 @@
-'use client';
+"use client";
 
-import { useState, useEffect, use } from 'react';
-import { useRouter } from 'next/navigation';
-import { useGlobalStore } from '@/lib/store';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
+import { useGlobalStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import {
-  Save,
-  Eye,
-  ArrowLeft,
-  Plus,
-  X,
-  FileText
-} from 'lucide-react';
-import { BlogPost } from '@/lib/types/blog';
-import Link from 'next/link';
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Save, Eye, ArrowLeft, Plus, X, FileText } from "lucide-react";
+import { BlogPost } from "@/lib/types/blog";
+import Link from "next/link";
 
 // 模拟博客数据
 const mockBlogPosts: BlogPost[] = [
   {
     id: 1,
-    title: 'Next.js 15 新特性解析',
-    excerpt: '深入了解 Next.js 15 带来的新功能和改进',
-    content: '# Next.js 15 新特性解析\n\nNext.js 15 是一个重要的版本更新...',
-    date: '2024-01-15',
-    readTime: '5 分钟',
-    category: '技术',
-    tags: ['Next.js', 'React', '前端'],
-    slug: 'nextjs-15-features',
-    author: '3min',
-    published: true
-  }
+    title: "Next.js 15 新特性解析",
+    excerpt: "深入了解 Next.js 15 带来的新功能和改进",
+    content: "# Next.js 15 新特性解析\n\nNext.js 15 是一个重要的版本更新...",
+    date: "2024-01-15",
+    readTime: "5 分钟",
+    category: "技术",
+    tags: ["Next.js", "React", "前端"],
+    slug: "nextjs-15-features",
+    author: "3min",
+    published: true,
+  },
 ];
 
-const categories = ['技术', '生活', '随笔', '教程'];
-const commonTags = ['React', 'Next.js', 'JavaScript', 'TypeScript', '前端', '后端', '开发', '经验'];
+const categories = ["技术", "生活", "随笔", "教程"];
+const commonTags = [
+  "React",
+  "Next.js",
+  "JavaScript",
+  "TypeScript",
+  "前端",
+  "后端",
+  "开发",
+  "经验",
+];
 
 interface EditBlogPageProps {
   params: Promise<{
@@ -65,20 +67,20 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
   const router = useRouter();
   const { isAuthenticated, isAdmin } = useGlobalStore();
   const [formData, setFormData] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    category: '',
+    title: "",
+    excerpt: "",
+    content: "",
+    category: "",
     tags: [] as string[],
-    published: false
+    published: false,
   });
-  const [newTag, setNewTag] = useState('');
+  const [newTag, setNewTag] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated || !isAdmin()) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
 
@@ -91,17 +93,17 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
           setFormData({
             title: post.title,
             excerpt: post.excerpt,
-            content: post.content || '',
+            content: post.content || "",
             category: post.category,
             tags: post.tags,
-            published: post.published
+            published: post.published,
           });
         } else {
-          router.push('/admin/blog');
+          router.push("/admin/blog");
         }
       } catch (error) {
-        console.error('加载博客失败:', error);
-        router.push('/admin/blog');
+        console.error("加载博客失败:", error);
+        router.push("/admin/blog");
       } finally {
         setIsLoading(false);
       }
@@ -110,7 +112,10 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
     loadBlogPost();
   }, [id, isAuthenticated, isAdmin, router]);
 
-  const handleInputChange = (field: string, value: string | boolean | string[]) => {
+  const handleInputChange = (
+    field: string,
+    value: string | boolean | string[]
+  ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -118,38 +123,38 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
     if (tag && !formData.tags.includes(tag)) {
       setFormData(prev => ({
         ...prev,
-        tags: [...prev.tags, tag]
+        tags: [...prev.tags, tag],
       }));
     }
-    setNewTag('');
+    setNewTag("");
   };
 
   const removeTag = (tagToRemove: string) => {
     setFormData(prev => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: prev.tags.filter(tag => tag !== tagToRemove),
     }));
   };
 
   const handleSave = async (publish: boolean = false) => {
     setIsSaving(true);
-    
+
     try {
       const updatedPost = {
         ...formData,
         readTime: `${Math.ceil(formData.content.length / 500)} 分钟`,
-        published: publish || formData.published
+        published: publish || formData.published,
       };
 
       // 这里应该调用API更新博客
-      console.log('更新博客:', updatedPost);
-      
+      console.log("更新博客:", updatedPost);
+
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      router.push('/admin/blog');
+
+      router.push("/admin/blog");
     } catch (error) {
-      console.error('保存失败:', error);
+      console.error("保存失败:", error);
     } finally {
       setIsSaving(false);
     }
@@ -189,7 +194,11 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
               </h1>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => handleSave(false)} disabled={isSaving}>
+              <Button
+                variant="outline"
+                onClick={() => handleSave(false)}
+                disabled={isSaving}
+              >
                 <Save className="h-4 w-4 mr-2" />
                 保存草稿
               </Button>
@@ -203,7 +212,7 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
 
         {/* 表单内容与新建页面相同，这里省略重复代码 */}
         {/* ... 与新建页面相同的表单结构 ... */}
-        
+
         <div className="grid lg:grid-cols-3 gap-8">
           {/* 主要内容 */}
           <div className="lg:col-span-2 space-y-6">
@@ -220,7 +229,7 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
                     id="title"
                     placeholder="输入文章标题"
                     value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    onChange={e => handleInputChange("title", e.target.value)}
                   />
                 </div>
                 <div>
@@ -229,7 +238,7 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
                     id="excerpt"
                     placeholder="输入文章摘要，简要描述文章内容"
                     value={formData.excerpt}
-                    onChange={(e) => handleInputChange('excerpt', e.target.value)}
+                    onChange={e => handleInputChange("excerpt", e.target.value)}
                     rows={3}
                   />
                 </div>
@@ -240,13 +249,15 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             <Card>
               <CardHeader>
                 <CardTitle>文章内容</CardTitle>
-                <CardDescription>使用 Markdown 格式编写文章内容</CardDescription>
+                <CardDescription>
+                  使用 Markdown 格式编写文章内容
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Textarea
                   placeholder="# 文章标题\n\n在这里使用 Markdown 格式编写您的文章内容...\n\n## 二级标题\n\n段落内容..."
                   value={formData.content}
-                  onChange={(e) => handleInputChange('content', e.target.value)}
+                  onChange={e => handleInputChange("content", e.target.value)}
                   rows={20}
                   className="font-mono"
                 />
@@ -267,7 +278,9 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
                   <Switch
                     id="published"
                     checked={formData.published}
-                    onCheckedChange={(checked) => handleInputChange('published', checked)}
+                    onCheckedChange={checked =>
+                      handleInputChange("published", checked)
+                    }
                   />
                 </div>
               </CardContent>
@@ -281,12 +294,17 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
               <CardContent className="space-y-4">
                 <div>
                   <Label htmlFor="category">文章分类</Label>
-                  <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
+                  <Select
+                    value={formData.category}
+                    onValueChange={value =>
+                      handleInputChange("category", value)
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="选择分类" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories.map((category) => (
+                      {categories.map(category => (
                         <SelectItem key={category} value={category}>
                           {category}
                         </SelectItem>
@@ -294,16 +312,16 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label>文章标签</Label>
                   <div className="flex gap-2 mt-2">
                     <Input
                       placeholder="添加标签"
                       value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
+                      onChange={e => setNewTag(e.target.value)}
+                      onKeyPress={e => {
+                        if (e.key === "Enter") {
                           e.preventDefault();
                           addTag(newTag);
                         }
@@ -318,12 +336,12 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
-                  
+
                   {/* 常用标签 */}
                   <div className="mt-3">
                     <Label className="text-sm text-gray-600">常用标签：</Label>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {commonTags.map((tag) => (
+                      {commonTags.map(tag => (
                         <Badge
                           key={tag}
                           variant="outline"
@@ -335,14 +353,19 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
                       ))}
                     </div>
                   </div>
-                  
+
                   {/* 已选标签 */}
                   {formData.tags.length > 0 && (
                     <div className="mt-3">
-                      <Label className="text-sm text-gray-600">已选标签：</Label>
+                      <Label className="text-sm text-gray-600">
+                        已选标签：
+                      </Label>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {formData.tags.map((tag) => (
-                          <Badge key={tag} className="bg-blue-100 text-blue-800">
+                        {formData.tags.map(tag => (
+                          <Badge
+                            key={tag}
+                            className="bg-blue-100 text-blue-800"
+                          >
                             {tag}
                             <X
                               className="h-3 w-3 ml-1 cursor-pointer"

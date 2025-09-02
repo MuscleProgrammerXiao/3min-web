@@ -1,64 +1,69 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useGlobalStore } from '@/lib/store';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useGlobalStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import {
-  Save,
-  Eye,
-  ArrowLeft,
-  Plus,
-  X,
-  FileText
-} from 'lucide-react';
-import { BlogPost,BlogCategory } from '@/lib/types/blog';
-import Link from 'next/link';
-import dynamic from 'next/dynamic';
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Save, Eye, ArrowLeft, Plus, X, FileText } from "lucide-react";
+import { BlogPost, BlogCategory } from "@/lib/types/blog";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 
-const categories = ['技术', '生活', '随笔', '教程'];
-const commonTags = ['React', 'Next.js', 'JavaScript', 'TypeScript', '前端', '后端', '开发', '经验'];
+const categories = ["技术", "生活", "随笔", "教程"];
+const commonTags = [
+  "React",
+  "Next.js",
+  "JavaScript",
+  "TypeScript",
+  "前端",
+  "后端",
+  "开发",
+  "经验",
+];
 
 export default function NewBlogPage() {
   const router = useRouter();
   const { isAuthenticated, isAdmin, user } = useGlobalStore();
   const [formData, setFormData] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    category: '',
+    title: "",
+    excerpt: "",
+    content: "",
+    category: "",
     tags: [] as string[],
-    published: false
+    published: false,
   });
-  const [newTag, setNewTag] = useState('');
+  const [newTag, setNewTag] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated || !isAdmin()) {
-      router.push('/login');
+      router.push("/login");
     }
   }, [isAuthenticated, isAdmin, router]);
 
-  const handleInputChange = (field: string, value: string | boolean | string[]) => {
+  const handleInputChange = (
+    field: string,
+    value: string | boolean | string[]
+  ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -66,29 +71,29 @@ export default function NewBlogPage() {
     if (tag && !formData.tags.includes(tag)) {
       setFormData(prev => ({
         ...prev,
-        tags: [...prev.tags, tag]
+        tags: [...prev.tags, tag],
       }));
     }
-    setNewTag('');
+    setNewTag("");
   };
 
   const removeTag = (tagToRemove: string) => {
     setFormData(prev => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: prev.tags.filter(tag => tag !== tagToRemove),
     }));
   };
 
   const generateSlug = (title: string) => {
     return title
       .toLowerCase()
-      .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+      .replace(/^-+|-+$/g, "");
   };
 
   const handleSave = async (publish: boolean = false) => {
     setIsSaving(true);
-    
+
     try {
       const blogPost: Partial<BlogPost> = {
         title: formData.title,
@@ -97,21 +102,21 @@ export default function NewBlogPage() {
         category: formData.category as BlogCategory,
         tags: formData.tags,
         slug: generateSlug(formData.title),
-        author: user?.name || '3min',
-        date: new Date().toISOString().split('T')[0],
+        author: user?.name || "3min",
+        date: new Date().toISOString().split("T")[0],
         readTime: `${Math.ceil(formData.content.length / 500)} 分钟`,
-        published: publish || formData.published
+        published: publish || formData.published,
       };
 
       // 这里应该调用API保存博客
-      console.log('保存博客:', blogPost);
-      
+      console.log("保存博客:", blogPost);
+
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      router.push('/admin/blog');
+
+      router.push("/admin/blog");
     } catch (error) {
-      console.error('保存失败:', error);
+      console.error("保存失败:", error);
     } finally {
       setIsSaving(false);
     }
@@ -130,7 +135,10 @@ export default function NewBlogPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <Link href="/admin/blog">
-                <Button variant="outline" className="mb-3 md:mb-4 w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  className="mb-3 md:mb-4 w-full sm:w-auto"
+                >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   返回博客管理
                 </Button>
@@ -142,17 +150,17 @@ export default function NewBlogPage() {
             </div>
             {/* 移动端按钮布局优化 */}
             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-              <Button 
-                variant="outline" 
-                onClick={() => handleSave(false)} 
+              <Button
+                variant="outline"
+                onClick={() => handleSave(false)}
                 disabled={isSaving}
                 className="w-full sm:w-auto"
               >
                 <Save className="h-4 w-4 mr-2" />
                 保存草稿
               </Button>
-              <Button 
-                onClick={() => handleSave(true)} 
+              <Button
+                onClick={() => handleSave(true)}
                 disabled={isSaving}
                 className="w-full sm:w-auto"
               >
@@ -171,26 +179,32 @@ export default function NewBlogPage() {
             <Card>
               <CardHeader className="pb-3 md:pb-4">
                 <CardTitle className="text-lg md:text-xl">基本信息</CardTitle>
-                <CardDescription className="text-sm">填写文章的基本信息</CardDescription>
+                <CardDescription className="text-sm">
+                  填写文章的基本信息
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 md:space-y-4">
                 <div>
-                  <Label htmlFor="title" className="text-sm font-medium">文章标题</Label>
+                  <Label htmlFor="title" className="text-sm font-medium">
+                    文章标题
+                  </Label>
                   <Input
                     id="title"
                     placeholder="输入文章标题"
                     value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    onChange={e => handleInputChange("title", e.target.value)}
                     className="mt-1"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="excerpt" className="text-sm font-medium">文章摘要</Label>
+                  <Label htmlFor="excerpt" className="text-sm font-medium">
+                    文章摘要
+                  </Label>
                   <Textarea
                     id="excerpt"
                     placeholder="输入文章摘要，简要描述文章内容"
                     value={formData.excerpt}
-                    onChange={(e) => handleInputChange('excerpt', e.target.value)}
+                    onChange={e => handleInputChange("excerpt", e.target.value)}
                     rows={3}
                     className="mt-1 resize-none"
                   />
@@ -202,22 +216,28 @@ export default function NewBlogPage() {
             <Card>
               <CardHeader className="pb-3 md:pb-4">
                 <CardTitle className="text-lg md:text-xl">文章内容</CardTitle>
-                <CardDescription className="text-sm">使用 Markdown 编辑器编写文章内容，支持实时预览</CardDescription>
+                <CardDescription className="text-sm">
+                  使用 Markdown 编辑器编写文章内容，支持实时预览
+                </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="markdown-editor-container">
                   <MDEditor
                     value={formData.content}
-                    onChange={(value) => handleInputChange('content', value || '')}
+                    onChange={value =>
+                      handleInputChange("content", value || "")
+                    }
                     preview="edit"
                     hideToolbar={false}
                     textareaProps={{
-                      placeholder: '# 文章标题\n\n在这里使用 Markdown 格式编写您的文章内容...\n\n## 二级标题\n\n段落内容...',
+                      placeholder:
+                        "# 文章标题\n\n在这里使用 Markdown 格式编写您的文章内容...\n\n## 二级标题\n\n段落内容...",
                       style: {
                         fontSize: window.innerWidth < 768 ? 12 : 14,
                         lineHeight: 1.6,
-                        fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace'
-                      }
+                        fontFamily:
+                          'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
+                      },
                     }}
                     height={window.innerWidth < 768 ? 400 : 600}
                     data-color-mode="light"
@@ -236,11 +256,15 @@ export default function NewBlogPage() {
               </CardHeader>
               <CardContent className="space-y-2 md:space-y-3">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="published" className="text-sm">立即发布</Label>
+                  <Label htmlFor="published" className="text-sm">
+                    立即发布
+                  </Label>
                   <Switch
                     id="published"
                     checked={formData.published}
-                    onCheckedChange={(checked) => handleInputChange('published', checked)}
+                    onCheckedChange={checked =>
+                      handleInputChange("published", checked)
+                    }
                   />
                 </div>
               </CardContent>
@@ -249,17 +273,26 @@ export default function NewBlogPage() {
             {/* 分类和标签 */}
             <Card>
               <CardHeader className="pb-2 md:pb-3">
-                <CardTitle className="text-base md:text-lg">分类和标签</CardTitle>
+                <CardTitle className="text-base md:text-lg">
+                  分类和标签
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 md:space-y-3">
                 <div>
-                  <Label htmlFor="category" className="text-sm font-medium">文章分类</Label>
-                  <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
+                  <Label htmlFor="category" className="text-sm font-medium">
+                    文章分类
+                  </Label>
+                  <Select
+                    value={formData.category}
+                    onValueChange={value =>
+                      handleInputChange("category", value)
+                    }
+                  >
                     <SelectTrigger className="mt-1">
                       <SelectValue placeholder="选择分类" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories.map((category) => (
+                      {categories.map(category => (
                         <SelectItem key={category} value={category}>
                           {category}
                         </SelectItem>
@@ -267,16 +300,16 @@ export default function NewBlogPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label className="text-sm font-medium">文章标签</Label>
                   <div className="flex gap-2 mt-1">
                     <Input
                       placeholder="添加标签"
                       value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
+                      onChange={e => setNewTag(e.target.value)}
+                      onKeyPress={e => {
+                        if (e.key === "Enter") {
                           e.preventDefault();
                           addTag(newTag);
                         }
@@ -293,12 +326,12 @@ export default function NewBlogPage() {
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
-                  
+
                   {/* 常用标签 - 移动端优化 */}
                   <div className="mt-2">
                     <Label className="text-xs text-gray-600">常用标签：</Label>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {commonTags.map((tag) => (
+                      {commonTags.map(tag => (
                         <Badge
                           key={tag}
                           variant="outline"
@@ -310,14 +343,19 @@ export default function NewBlogPage() {
                       ))}
                     </div>
                   </div>
-                  
+
                   {/* 已选标签 */}
                   {formData.tags.length > 0 && (
                     <div className="mt-2">
-                      <Label className="text-xs text-gray-600">已选标签：</Label>
+                      <Label className="text-xs text-gray-600">
+                        已选标签：
+                      </Label>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {formData.tags.map((tag) => (
-                          <Badge key={tag} className="bg-blue-100 text-blue-800 text-xs px-2 py-1">
+                        {formData.tags.map(tag => (
+                          <Badge
+                            key={tag}
+                            className="bg-blue-100 text-blue-800 text-xs px-2 py-1"
+                          >
                             {tag}
                             <X
                               className="h-3 w-3 ml-1 cursor-pointer"
@@ -344,7 +382,9 @@ export default function NewBlogPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>预计阅读时间：</span>
-                  <span className="font-medium">{Math.ceil(formData.content.length / 500)} 分钟</span>
+                  <span className="font-medium">
+                    {Math.ceil(formData.content.length / 500)} 分钟
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>标签数量：</span>
@@ -360,7 +400,4 @@ export default function NewBlogPage() {
 }
 
 // 动态导入MDEditor以避免SSR问题
-const MDEditor = dynamic(
-  () => import('@uiw/react-md-editor'),
-  { ssr: false }
-);
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });

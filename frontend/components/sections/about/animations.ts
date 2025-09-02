@@ -4,10 +4,10 @@ export const containerVariants = {
     opacity: 1,
     transition: {
       duration: 0.6,
-      staggerChildren: 0.2
-    }
-  }
-}
+      staggerChildren: 0.2,
+    },
+  },
+};
 
 export const itemVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -16,17 +16,17 @@ export const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: 'easeOut'as const
-    }
-  }
-}
+      ease: "easeOut" as const,
+    },
+  },
+};
 
 export const skillCardVariants = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0.8, 
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
     y: 40,
-    rotateX: -15
+    rotateX: -15,
   },
   visible: (index: number) => ({
     opacity: 1,
@@ -36,10 +36,10 @@ export const skillCardVariants = {
     transition: {
       duration: 0.6,
       delay: index * 0.1,
-      ease: [0.25, 0.46, 0.45, 0.94]as const
-    }
-  })
-}
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+    },
+  }),
+};
 
 export const progressVariants = {
   hidden: { width: 0, opacity: 0 },
@@ -49,10 +49,10 @@ export const progressVariants = {
     transition: {
       duration: 1.2,
       ease: "easeOut",
-      delay: 0.3
-    }
-  })
-}
+      delay: 0.3,
+    },
+  }),
+};
 
 export const interestVariants = {
   hidden: { opacity: 0, scale: 0.9, rotateY: -15 },
@@ -63,7 +63,7 @@ export const interestVariants = {
     transition: {
       duration: 0.6,
       delay: index * 0.15,
-      ease: 'easeOut'
-    }
-  })
-}
+      ease: "easeOut" as const,
+    },
+  }),
+};
