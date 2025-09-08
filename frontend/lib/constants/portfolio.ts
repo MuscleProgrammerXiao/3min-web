@@ -1,134 +1,124 @@
+import { calculateYearDifference } from "@/lib/utils/scroll";
 // 项目类型定义
 export interface Project {
-  id: number
-  title: string
-  description: string
-  category: 'web' | 'design' | 'mobile'
-  technologies: string[]
-  githubUrl: string
-  liveUrl: string
+  id: number;
+  title: string;
+  description: string;
+  category: "web" | "design" | "mobile";
+  technologies: string[];
+  githubUrl: string;
+  liveUrl: string;
+  image?: string; // 添加可选的图片字段
 }
 
 // 项目数据
 export const projects: Project[] = [
   {
     id: 1,
-    title: '响应式网站设计',
-    description: '现代化的响应式网站，具有优雅的用户界面和流畅的用户体验。',
-    category: 'web',
-    technologies: ['React', 'Next.js', 'Tailwind CSS', 'Framer Motion'],
-    githubUrl: '#',
-    liveUrl: '#'
+    title: "AI智能报表录取",
+    description:
+      "通过ai识别财务报表，将报表信息自动填入财报模版，极大提升财报录入效率。",
+    category: "web",
+    technologies: [
+      "React",
+      "react-konva",
+      "TypeScript",
+      "Zustand",
+      "Ant Design Pro",
+      "UmiJS 4.0",
+      "react-zoom-pan-pinch",
+    ],
+    githubUrl: "https://github.com/MuscleProgrammerXiao",
+    liveUrl: "http://116.205.176.83:8080/ocr-report",
+    image: "/images/fsr.png",
   },
   {
     id: 2,
-    title: 'UI/UX 设计系统',
-    description: '完整的设计系统，包含组件库、设计规范和交互原型。',
-    category: 'design',
-    technologies: ['Figma', 'Adobe XD', 'Sketch', 'Principle'],
-    githubUrl: '#',
-    liveUrl: '#'
+    title: "电商管理系统",
+    description: "基于React和Node.js的全栈电商管理平台，支持商品管理、订单处理、用户管理等功能。",
+    category: "web",
+    technologies: ["React", "Node.js", "MongoDB", "Express", "TypeScript"],
+    githubUrl: "https://github.com/MuscleProgrammerXiao",
+    liveUrl: "#",
+    image: "/images/ecommerce.png",
   },
   {
     id: 3,
-    title: '移动端应用',
-    description: '跨平台移动应用，提供原生般的用户体验和流畅的性能。',
-    category: 'mobile',
-    technologies: ['React Native', 'Expo', 'Redux', 'Firebase'],
-    githubUrl: '#',
-    liveUrl: '#'
+    title: "移动端社交应用",
+    description: "基于React Native开发的社交应用，支持实时聊天、动态发布、好友管理等功能。",
+    category: "mobile",
+    technologies: ["React Native", "Firebase", "Redux", "TypeScript"],
+    githubUrl: "https://github.com/MuscleProgrammerXiao",
+    liveUrl: "#",
+    image: "/images/social-app.png",
   },
   {
     id: 4,
-    title: '数据可视化平台',
-    description: '企业级数据可视化平台，支持多种图表类型和实时数据更新。',
-    category: 'web',
-    technologies: ['Vue.js', 'D3.js', 'Node.js', 'MongoDB'],
-    githubUrl: '#',
-    liveUrl: '#'
+    title: "企业官网设计",
+    description: "现代化企业官网UI/UX设计，注重用户体验和视觉效果，响应式设计适配多端。",
+    category: "design",
+    technologies: ["Figma", "Adobe XD", "Photoshop", "Illustrator"],
+    githubUrl: "https://github.com/MuscleProgrammerXiao",
+    liveUrl: "#",
+    image: "/images/corporate-design.png",
   },
   {
     id: 5,
-    title: '品牌视觉设计',
-    description: '为初创公司设计的完整品牌视觉识别系统，包括logo、色彩和字体规范。',
-    category: 'design',
-    technologies: ['Illustrator', 'Photoshop', 'InDesign', 'After Effects'],
-    githubUrl: '#',
-    liveUrl: '#'
+    title: "数据可视化平台",
+    description: "基于D3.js和Chart.js的数据可视化平台，支持多种图表类型和实时数据更新。",
+    category: "web",
+    technologies: ["Vue.js", "D3.js", "Chart.js", "Python", "FastAPI"],
+    githubUrl: "https://github.com/MuscleProgrammerXiao",
+    liveUrl: "#",
+    image: "/images/data-viz.png",
   },
   {
     id: 6,
-    title: '智能家居控制',
-    description: 'IoT智能家居控制应用，支持语音控制和自动化场景设置。',
-    category: 'mobile',
-    technologies: ['Flutter', 'Dart', 'IoT', 'WebSocket'],
-    githubUrl: '#',
-    liveUrl: '#'
+    title: "健身追踪应用",
+    description: "移动端健身追踪应用，支持运动记录、健康数据分析、个人训练计划制定。",
+    category: "mobile",
+    technologies: ["Flutter", "Dart", "SQLite", "Provider"],
+    githubUrl: "https://github.com/MuscleProgrammerXiao",
+    liveUrl: "#",
+    image: "/images/fitness-app.png",
   },
-  {
-    id: 7,
-    title: '电商管理系统',
-    description: '全功能电商后台管理系统，支持订单管理、库存管理和数据分析。',
-    category: 'web',
-    technologies: ['React', 'TypeScript', 'Ant Design', 'Express'],
-    githubUrl: '#',
-    liveUrl: '#'
-  },
-  {
-    id: 8,
-    title: '社交媒体应用',
-    description: '现代化社交媒体应用，支持实时聊天、动态分享和社区功能。',
-    category: 'mobile',
-    technologies: ['React Native', 'Socket.io', 'Redux', 'Node.js'],
-    githubUrl: '#',
-    liveUrl: '#'
-  },
-  {
-    id: 9,
-    title: '企业官网设计',
-    description: '专业的企业官网设计，突出品牌形象和企业文化。',
-    category: 'design',
-    technologies: ['Figma', 'Photoshop', 'Illustrator', 'Webflow'],
-    githubUrl: '#',
-    liveUrl: '#'
-  }
-]
+];
 
 // 项目分类
-export const categories = ['全部', '网页开发', '设计', '移动端'] as const
+export const categories = ["全部", "web应用", "设计", "移动端"] as const;
 
 // 分类映射
 export const categoryMap = {
-  '全部': null,
-  '网页开发': 'web',
-  '设计': 'design',
-  '移动端': 'mobile'
-} as const
+  全部: null,
+  web应用: "web",
+  设计: "design",
+  移动端: "mobile",
+} as const;
 
 // 统计信息
 export const portfolioStats = {
   totalProjects: projects.length,
-  techFields: 3,
-  experienceYears: 2
-}
+  techFields: 5,
+  experienceYears: calculateYearDifference(2020),
+};
 
 // 页面配置
 export const portfolioConfig = {
   itemsPerPage: 6,
   animationDelay: 0.1,
-  projectsPerPage: 6
-}
+  projectsPerPage: 6,
+};
 
 // 分类图标映射
 export const categoryIcons = {
-  web: 'Code',
-  design: 'Palette',
-  mobile: 'Smartphone'
-} as const
+  web: "Code",
+  design: "Palette",
+  mobile: "Smartphone",
+} as const;
 
 // 分类显示名称映射
 export const categoryDisplayNames = {
-  web: '网页开发',
-  design: '设计',
-  mobile: '移动端'
-} as const
+  web: "web应用",
+  design: "设计",
+  mobile: "移动端",
+} as const;
