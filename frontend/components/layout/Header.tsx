@@ -1,14 +1,15 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useGlobalStore } from '@/lib/store'
-import { Button } from '@/components/ui/button'
-import { Menu, X, User, LogOut, Shield } from 'lucide-react'
-import { useHydration } from '@/lib/hooks'
-import { ShadcnNav } from '@/components/layout/ShadcnNav'
-import { motion, Transition } from 'framer-motion'
-import { useMemo } from 'react'
-import { STAGGER_DELAY } from '@/lib/constants/animations'
+import Link from "next/link";
+import { useGlobalStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+// import { Menu, X, User, LogOut, Shield } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useHydration } from "@/lib/hooks";
+import { ShadcnNav } from "@/components/layout/ShadcnNav";
+import { motion, Transition } from "framer-motion";
+import { useMemo } from "react";
+import { STAGGER_DELAY } from "@/lib/constants/animations";
 
 type CustomTransition = Transition & {
   staggerChildren?: number;
@@ -20,29 +21,36 @@ interface BaseItem {
   className?: string;
 }
 export default function Header() {
-  const hydrated = useHydration()
-  const { sidebarOpen, setSidebarOpen, isAuthenticated, user, logout, isAdmin } = useGlobalStore()
+  const hydrated = useHydration();
+  const {
+    sidebarOpen,
+    setSidebarOpen,
+    // isAuthenticated,
+    // user,
+    // logout,
+    isAdmin,
+  } = useGlobalStore();
 
   // 动态生成导航项，包含管理后台
   const navItems = useMemo(() => {
-    const baseItems:BaseItem[] = [
-      { href: '/', label: '主页' },
-      { href: '/portfolio', label: '作品' },
-      { href: '/blog', label: '博客' },
-      { href: '/contact', label: '联系我' },
-    ]
+    const baseItems: BaseItem[] = [
+      { href: "/", label: "主页" },
+      { href: "/portfolio", label: "作品" },
+      { href: "/blog", label: "博客" },
+      { href: "/contact", label: "联系我" },
+    ];
 
     // 如果是管理员，添加管理后台链接
     if (hydrated && isAdmin()) {
       baseItems.push({
-        href: '/admin',
-        label: '管理后台',
-        className: 'text-red-600 hover:text-red-700' 
-      })
+        href: "/admin",
+        label: "管理后台",
+        className: "text-red-600 hover:text-red-700",
+      });
     }
 
-    return baseItems
-  }, [hydrated, isAdmin])
+    return baseItems;
+  }, [hydrated, isAdmin]);
 
   const headerVariants = {
     hidden: { y: -100, opacity: 0 },
@@ -50,14 +58,14 @@ export default function Header() {
       y: 0,
       opacity: 1,
       transition: {
-        type: 'spring',
+        type: "spring",
         stiffness: 300,
         damping: 30,
         staggerChildren: STAGGER_DELAY.normal,
-        delayChildren: STAGGER_DELAY.fast
-      } satisfies CustomTransition
-    }
-  }
+        delayChildren: STAGGER_DELAY.fast,
+      } satisfies CustomTransition,
+    },
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -65,17 +73,17 @@ export default function Header() {
       opacity: 1,
       y: 0,
       transition: {
-        type: 'spring',
+        type: "spring",
         stiffness: 260,
-        damping: 20
-      } satisfies CustomTransition
-    }
-  }
+        damping: 20,
+      } satisfies CustomTransition,
+    },
+  };
 
   // 处理移动端导航项点击事件
   const handleMobileNavClick = () => {
-    setSidebarOpen(false)
-  }
+    setSidebarOpen(false);
+  };
 
   return (
     <motion.header
@@ -88,7 +96,10 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <motion.div variants={itemVariants} className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors drop-shadow-sm">
+            <Link
+              href="/"
+              className="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors drop-shadow-sm"
+            >
               3min°
             </Link>
           </motion.div>
@@ -103,7 +114,7 @@ export default function Header() {
             variants={itemVariants}
             className="flex items-center space-x-4"
           >
-            {hydrated ? (
+            {/* {hydrated ? (
               isAuthenticated ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -143,8 +154,8 @@ export default function Header() {
                   登录
                 </Button>
               </Link>
-            )}
-            
+            )} */}
+
             {/* Mobile menu button */}
             <motion.div whileTap={{ scale: 0.95 }}>
               <Button
@@ -157,7 +168,11 @@ export default function Header() {
                   animate={{ rotate: hydrated && sidebarOpen ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {hydrated && sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                  {hydrated && sidebarOpen ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Menu className="h-5 w-5" />
+                  )}
                 </motion.div>
               </Button>
             </motion.div>
@@ -169,16 +184,16 @@ export default function Header() {
           <motion.div
             initial={false}
             animate={{
-              height: sidebarOpen ? 'auto' : 0,
-              opacity: sidebarOpen ? 1 : 0
+              height: sidebarOpen ? "auto" : 0,
+              opacity: sidebarOpen ? 1 : 0,
             }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
             className="md:hidden overflow-hidden"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/40 backdrop-blur-sm border-t border-white/30">
-              <ShadcnNav 
-                items={navItems} 
-                orientation="vertical" 
+              <ShadcnNav
+                items={navItems}
+                orientation="vertical"
                 onItemClick={handleMobileNavClick} // 传递关闭菜单的回调函数
               />
             </div>
@@ -186,5 +201,5 @@ export default function Header() {
         )}
       </div>
     </motion.header>
-  )
+  );
 }
