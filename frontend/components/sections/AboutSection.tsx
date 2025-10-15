@@ -31,9 +31,9 @@ const AboutSection = () => {
           {/* 个人介绍部分 */}
           <ProfileCard />
           {/* 技能专长部分 */}
-          {/* <SkillsGrid isInView={isInView} /> */}
+          <SkillsGrid isInView={isInView} />
           {/* 兴趣爱好部分 */}
-          {/* <InterestsGrid /> */}
+          <InterestsGrid />
         </motion.div>
       </div>
     </section>

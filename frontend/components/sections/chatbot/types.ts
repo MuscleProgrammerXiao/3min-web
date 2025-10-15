@@ -35,6 +35,7 @@ export interface ChatInputProps {
   onSubmit: (message: string) => void;
   isTyping: boolean;
   inputRef: React.RefObject<HTMLInputElement>;
+  shouldFocusOnSuggestion?: boolean; // 建议点击后是否聚焦输入框，默认 true
 }
 
 export interface AIResponse {

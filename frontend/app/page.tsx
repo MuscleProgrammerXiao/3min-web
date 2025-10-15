@@ -9,7 +9,6 @@ import { useScrollToTop } from "@/lib/hooks";
 export default function Home() {
   // 直接调用 hook，不需要返回值
   useScrollToTop();
-
   return (
     <main>
       <HeroSection />

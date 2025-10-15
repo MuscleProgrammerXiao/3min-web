@@ -9,9 +9,80 @@ import {
 } from "./animations";
 import BubbleDecoration from "./BubbleDecoration";
 import FloatingDecoration from "./FloatingDecoration";
+import { useMemo } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+// 提取文本中的 JSON 候选内容（支持 ```json 代码块、通用 ``` 代码块、整体 JSON、以及第一个平衡的大括号/中括号片段）
+const extractJsonCandidate = (text: string): string | null => {
+  const fenceJson = text.match(/```json\s*([\s\S]*?)```/i);
+  if (fenceJson?.[1]) return fenceJson[1].trim();
+
+  const fenceGeneric = text.match(/```\s*([\s\S]*?)```/);
+  if (fenceGeneric?.[1]) {
+    const t = fenceGeneric[1].trim();
+    if (
+      (t.startsWith("{") && t.endsWith("}")) ||
+      (t.startsWith("[") && t.endsWith("]"))
+    ) {
+      return t;
+    }
+  }
+
+  const trimmed = text.trim();
+  if (
+    (trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+    (trimmed.startsWith("[") && trimmed.endsWith("]"))
+  ) {
+    return trimmed;
+  }
+
+  const findBalanced = (open: string, close: string) => {
+    let depth = 0;
+    let start = -1;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (ch === open) {
+        if (depth === 0) start = i;
+        depth++;
+      } else if (ch === close) {
+        if (depth > 0) {
+          depth--;
+          if (depth === 0 && start !== -1) {
+            const candidate = text.slice(start, i + 1).trim();
+            if (candidate.startsWith(open) && candidate.endsWith(close))
+              return candidate;
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  return findBalanced("{", "}") || findBalanced("[", "]");
+};
 
 const ChatBubble = ({ message, isTyping = false, type }: ChatBubbleProps) => {
   const isResponse = type === "response";
+
+  const { isJson, formattedJson } = useMemo(() => {
+    const tryParse = (text: string) => {
+      try {
+        const obj = JSON.parse(text);
+        return { ok: true, pretty: JSON.stringify(obj, null, 2) };
+      } catch {
+        return { ok: false, pretty: "" };
+      }
+    };
+
+    const candidate = extractJsonCandidate(message);
+    if (candidate) {
+      const res = tryParse(candidate);
+      if (res.ok) return { isJson: true, formattedJson: res.pretty };
+    }
+
+    return { isJson: false, formattedJson: "" };
+  }, [message]);
 
   return (
     <motion.div
@@ -64,22 +135,91 @@ const ChatBubble = ({ message, isTyping = false, type }: ChatBubbleProps) => {
           <Bot className="w-6 h-6 text-white" />
         </motion.div>
 
-        <div className="text-center pt-6">
-          <motion.p
-            className="text-base md:text-lg text-gray-800 dark:text-white leading-relaxed font-medium"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {message}
-            {isTyping && (
-              <motion.span
-                {...typingIndicatorVariants}
-                className="ml-1 text-blue-500 font-bold"
+        <div className="pt-6">
+          {isJson ? (
+            <motion.pre
+              className="text-sm md:text-base text-left text-gray-800 dark:text-white leading-relaxed font-mono bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 rounded-xl p-4 whitespace-pre overflow-x-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <code>{formattedJson}</code>
+              {isTyping && (
+                <motion.span
+                  {...typingIndicatorVariants}
+                  className="ml-1 text-blue-500 font-bold"
+                >
+                  ▋
+                </motion.span>
+              )}
+            </motion.pre>
+          ) : (
+            <motion.div
+              className="prose prose-sm md:prose text-left max-w-none text-gray-800 dark:text-white dark:prose-invert"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h1: ({ node, ...props }) => (
+                    <h1 className="text-2xl md:text-3xl font-bold mt-2 mb-3" {...props} />
+                  ),
+                  h2: ({ node, ...props }) => (
+                    <h2 className="text-xl md:text-2xl font-bold mt-2 mb-3" {...props} />
+                  ),
+                  h3: ({ node, ...props }) => (
+                    <h3 className="text-lg md:text-xl font-semibold mt-2 mb-2" {...props} />
+                  ),
+                  p: ({ node, ...props }) => (
+                    <p className="leading-relaxed mb-2" {...props} />
+                  ),
+                  a: ({ node, ...props }) => (
+                    <a className="text-blue-600 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />
+                  ),
+                  ul: ({ node, ...props }) => (
+                    <ul className="list-disc list-inside pl-0 my-2" {...props} />
+                  ),
+                  ol: ({ node, ...props }) => (
+                    <ol className="list-decimal list-inside pl-0 my-2" {...props} />
+                  ),
+                  li: ({ node, ...props }) => (
+                    <li className="mb-1" {...props} />
+                  ),
+                  code: ({ className, children, ...props }: any) => {
+                    const isCodeBlock = typeof className === "string" && /language-/.test(className);
+                    if (isCodeBlock) {
+                      return (
+                        <code className="font-mono text-sm" {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+                    return (
+                      <code className="bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded font-mono text-sm" {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                  pre: ({ node, ...props }) => (
+                    <pre className="bg-gray-100 dark:bg-slate-800 rounded-lg p-3 my-3 overflow-x-auto" {...props} />
+                  ),
+                  blockquote: ({ node, ...props }) => (
+                    <blockquote className="border-l-4 border-gray-300 dark:border-slate-600 pl-3 italic my-3" {...props} />
+                  ),
+                }}
               >
-                ▋
-              </motion.span>
-            )}
-          </motion.p>
+                {message}
+              </ReactMarkdown>
+              {isTyping && (
+                <motion.span
+                  {...typingIndicatorVariants}
+                  className="ml-1 text-blue-500 font-bold"
+                >
+                  ▋
+                </motion.span>
+              )}
+            </motion.div>
+          )}
         </div>
       </motion.div>
     </motion.div>

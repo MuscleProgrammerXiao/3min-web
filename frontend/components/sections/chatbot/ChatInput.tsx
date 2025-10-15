@@ -1,37 +1,39 @@
-'use client'
-import { motion } from 'framer-motion'
-import { Send, User } from 'lucide-react'
-import { ChatInputProps } from './types'
-import { suggestions } from './data'
-import { itemVariants } from './animations'
+"use client";
+import { motion } from "framer-motion";
+import { Send, User } from "lucide-react";
+import { ChatInputProps } from "./types";
+import { suggestions } from "./data";
+import { itemVariants } from "./animations";
 
-const ChatInput = ({ 
-  value, 
-  onChange, 
-  onSubmit, 
-  isTyping, 
-  inputRef 
+const ChatInput = ({
+  value,
+  onChange,
+  onSubmit,
+  isTyping,
+  inputRef,
+  shouldFocusOnSuggestion = true,
 }: ChatInputProps) => {
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!value.trim() || isTyping) return
-    onSubmit(value)
-  }
+    e.preventDefault();
+    if (!value.trim() || isTyping) return;
+    onSubmit(value);
+  };
 
   const handleSuggestionClick = (suggestion: string) => {
-    onChange(suggestion)
-    // 点击建议后重新聚焦输入框
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 100)
-  }
-
+    onChange(suggestion);
+    // 点击建议后是否聚焦输入框（可配置）
+    if (shouldFocusOnSuggestion) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  };
   return (
-    <motion.div 
+    <motion.div
       variants={itemVariants}
       className="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-xl backdrop-blur-sm bg-opacity-90 dark:bg-opacity-90 border border-gray-100 dark:border-slate-700"
-      whileHover={{ 
-        boxShadow: "0 20px 40px -12px rgba(0, 0, 0, 0.15)"
+      whileHover={{
+        boxShadow: "0 20px 40px -12px rgba(0, 0, 0, 0.15)",
       }}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -40,7 +42,7 @@ const ChatInput = ({
             ref={inputRef}
             type="text"
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={e => onChange(e.target.value)}
             placeholder="问问我的AI助手..."
             className="w-full px-6 py-4 bg-gray-50 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200 pr-12"
             disabled={isTyping}
@@ -48,16 +50,18 @@ const ChatInput = ({
           />
           <motion.div
             className="absolute right-4 top-1/2 transform -translate-y-1/2"
-            animate={value ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0.5 }}
+            animate={
+              value ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0.5 }
+            }
           >
             <User className="w-5 h-5 text-gray-400" />
           </motion.div>
         </div>
-        
+
         <div className="flex items-center justify-between">
           {/* 建议问题 */}
           <div className="flex flex-wrap gap-2 flex-1">
-            {suggestions.map((suggestion) => (
+            {suggestions.map(suggestion => (
               <motion.button
                 key={suggestion}
                 type="button"
@@ -71,7 +75,7 @@ const ChatInput = ({
               </motion.button>
             ))}
           </div>
-          
+
           {/* 发送按钮 */}
           <motion.button
             type="submit"
@@ -86,7 +90,7 @@ const ChatInput = ({
         </div>
       </form>
     </motion.div>
-  )
-}
+  );
+};
 
-export default ChatInput
+export default ChatInput;
