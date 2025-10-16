@@ -13,6 +13,7 @@ interface AnimatedSectionProps {
   variants?: Variants;
   once?: boolean;
   margin?: string; // 保持接口中的 margin 属性名以便向后兼容
+  startVisible?: boolean; // 新增：是否在初始就显示，避免首屏白屏
 }
 type MarginType = `${number}px` | `${number}%` | `${number}px ${number}px`;
 export function AnimatedSection({
@@ -22,6 +23,7 @@ export function AnimatedSection({
   variants = containerVariants,
   once = true,
   margin = "-100px", // 默认值
+  startVisible = false,
 }: AnimatedSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once, margin: margin as MarginType }); // 改为 rootMargin
@@ -31,8 +33,8 @@ export function AnimatedSection({
       id={id}
       ref={ref}
       variants={variants}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      initial={startVisible ? "visible" : "hidden"}
+      animate={startVisible ? "visible" : isInView ? "visible" : "hidden"}
       className={cn(className)}
     >
       {children}

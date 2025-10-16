@@ -22,6 +22,17 @@ interface GlobalState {
 }
 
 // 分离 UI 状态和用户状态
+// 兼容 SSR/路由切换时的 localStorage 不可用情况
+const noopStorage: Storage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+  clear: () => {},
+  key: () => null,
+  length: 0,
+}
+const safeStorage = typeof window !== 'undefined' ? localStorage : noopStorage
+
 export const useGlobalStore = create<GlobalState>()(
   persist(
     (set, get) => ({
@@ -50,7 +61,7 @@ export const useGlobalStore = create<GlobalState>()(
     }),
     {
       name: 'user-storage',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => safeStorage),
       // 只持久化用户相关状态，不持久化 UI 状态
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,

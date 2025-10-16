@@ -116,7 +116,10 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <AnimatedSection className="relative min-h-screen flex flex-col overflow-hidden">
+    <AnimatedSection
+      className="relative min-h-screen flex flex-col overflow-hidden"
+      startVisible
+    >
       {/* 优化的背景图片 - 桌面端和移动端分别使用不同图片 */}
       <div className="absolute inset-0 z-0">
         {!imageError ? (
