@@ -187,14 +187,14 @@ export default function Header() {
               height: sidebarOpen ? "auto" : 0,
               opacity: sidebarOpen ? 1 : 0,
             }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
             className="md:hidden overflow-hidden"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/40 backdrop-blur-sm border-t border-white/30">
+            <div className="px-4 sm:px-6 py-3 space-y-1 bg-white/40 backdrop-blur-sm border-t border-white/30">
               <ShadcnNav
                 items={navItems}
                 orientation="vertical"
-                onItemClick={handleMobileNavClick} // 传递关闭菜单的回调函数
+                onItemClick={handleMobileNavClick}
               />
             </div>
           </motion.div>

@@ -15,7 +15,7 @@ export interface BlogPost {
 }
 
 // 博客分类类型
-export type BlogCategory = '技术' | '生活' | '分享' | '随笔';
+export type BlogCategory = "技术" | "生活" | "分享" | "随笔" | "教程" | "产品";
 
 // 搜索参数类型
 export interface BlogSearchParams {

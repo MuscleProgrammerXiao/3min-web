@@ -5,9 +5,11 @@ import BlogCard from '@/components/blog/BlogCard';
 import BlogSearch from '@/components/blog/BlogSearch';
 import BlogPagination from '@/components/blog/BlogPagination';
 import {  BlogCategory } from '@/lib/types/blog';
-import { mockPosts, BLOG_CONFIG } from '@/lib/mock/blog';
+import { BLOG_CONFIG } from '@/lib/mock/blog';
+import { useBlogStore } from '@/lib/stores/blog';
 
 export default function BlogPage() {
+  const posts = useBlogStore(state => state.posts);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<BlogCategory | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -15,7 +17,7 @@ export default function BlogPage() {
 
   // 过滤博客文章
   const filteredPosts = useMemo(() => {
-    return mockPosts.filter(post => {
+    return posts.filter(post => {
       const matchesQuery = !searchQuery || 
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -28,7 +30,7 @@ export default function BlogPage() {
       
       return matchesQuery && matchesCategory && matchesTags && post.published;
     });
-  }, [searchQuery, selectedCategory, selectedTags]);
+  }, [posts, searchQuery, selectedCategory, selectedTags]);
 
   // 分页逻辑
   const totalPages = Math.ceil(filteredPosts.length / BLOG_CONFIG.POSTS_PER_PAGE);

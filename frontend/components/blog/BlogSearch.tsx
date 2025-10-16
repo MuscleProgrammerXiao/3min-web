@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Search, X, ChevronDown, ChevronUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { BlogCategory } from '@/lib/types/blog';
+import { useState } from "react";
+import { Search, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { BlogCategory } from "@/lib/types/blog";
+import { BLOG_CATEGORIES, BLOG_AVAILABLE_TAGS } from "@/lib/constants/blog";
 
 interface BlogSearchProps {
   onSearch: (query: string) => void;
@@ -16,8 +17,8 @@ interface BlogSearchProps {
   searchQuery?: string;
 }
 
-const categories: BlogCategory[] = ['技术', '生活', '分享', '随笔'];
-const availableTags = ['React', 'Next.js', 'TypeScript', 'JavaScript', 'CSS', '前端', '后端', '设计', '工具', '心得'];
+const categories: BlogCategory[] = BLOG_CATEGORIES;
+const availableTags = BLOG_AVAILABLE_TAGS;
 
 export default function BlogSearch({
   onSearch,
@@ -25,7 +26,7 @@ export default function BlogSearch({
   onTagFilter,
   selectedCategory,
   selectedTags = [],
-  searchQuery = ''
+  searchQuery = "",
 }: BlogSearchProps) {
   const [query, setQuery] = useState(searchQuery);
   const [isTagsExpanded, setIsTagsExpanded] = useState(false);
@@ -51,8 +52,8 @@ export default function BlogSearch({
   };
 
   const clearFilters = () => {
-    setQuery('');
-    onSearch('');
+    setQuery("");
+    onSearch("");
     onCategoryFilter(null);
     onTagFilter([]);
   };
@@ -66,7 +67,7 @@ export default function BlogSearch({
           type="text"
           placeholder="搜索博客文章..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={e => setQuery(e.target.value)}
           className="pl-10 pr-4"
         />
         {query && (
@@ -75,8 +76,8 @@ export default function BlogSearch({
             variant="ghost"
             size="sm"
             onClick={() => {
-              setQuery('');
-              onSearch('');
+              setQuery("");
+              onSearch("");
             }}
             className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
           >
@@ -105,9 +106,11 @@ export default function BlogSearch({
 
         {/* 分类过滤 */}
         <div className="lg:space-y-3">
-          <h3 className="hidden lg:block text-sm font-medium text-gray-700 mb-3">分类</h3>
+          <h3 className="hidden lg:block text-sm font-medium text-gray-700 mb-3">
+            分类
+          </h3>
           <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
+            {categories.map(category => (
               <Badge
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
@@ -121,10 +124,14 @@ export default function BlogSearch({
         </div>
 
         {/* 标签过滤 */}
-        <div className={`lg:space-y-3 ${!isTagsExpanded ? 'hidden lg:block' : ''}`}>
-          <h3 className="hidden lg:block text-sm font-medium text-gray-700 mb-3">标签</h3>
+        <div
+          className={`lg:space-y-3 ${!isTagsExpanded ? "hidden lg:block" : ""}`}
+        >
+          <h3 className="hidden lg:block text-sm font-medium text-gray-700 mb-3">
+            标签
+          </h3>
           <div className="flex flex-wrap gap-2">
-            {availableTags.map((tag) => (
+            {availableTags.map(tag => (
               <Badge
                 key={tag}
                 variant={selectedTags.includes(tag) ? "default" : "outline"}

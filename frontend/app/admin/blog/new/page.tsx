@@ -25,24 +25,19 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Save, Eye, ArrowLeft, Plus, X, FileText } from "lucide-react";
 import { BlogPost, BlogCategory } from "@/lib/types/blog";
+import { BLOG_CATEGORIES, BLOG_AVAILABLE_TAGS } from "@/lib/constants/blog";
+import { useBlogStore } from "@/lib/stores/blog";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-const categories = ["技术", "生活", "随笔", "教程"];
-const commonTags = [
-  "React",
-  "Next.js",
-  "JavaScript",
-  "TypeScript",
-  "前端",
-  "后端",
-  "开发",
-  "经验",
-];
+// 统一配置，来自常量文件
+const categories = BLOG_CATEGORIES;
+const commonTags = BLOG_AVAILABLE_TAGS;
 
 export default function NewBlogPage() {
   const router = useRouter();
   const { isAuthenticated, isAdmin, user } = useGlobalStore();
+  const createPost = useBlogStore(state => state.createPost);
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -95,7 +90,7 @@ export default function NewBlogPage() {
     setIsSaving(true);
 
     try {
-      const blogPost: Partial<BlogPost> = {
+      const postInput: Omit<BlogPost, "id"> = {
         title: formData.title,
         excerpt: formData.excerpt,
         content: formData.content,
@@ -108,12 +103,7 @@ export default function NewBlogPage() {
         published: publish || formData.published,
       };
 
-      // 这里应该调用API保存博客
-      console.log("保存博客:", blogPost);
-
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
+      createPost(postInput);
       router.push("/admin/blog");
     } catch (error) {
       console.error("保存失败:", error);

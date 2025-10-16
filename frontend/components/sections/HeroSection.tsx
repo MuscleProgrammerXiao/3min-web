@@ -225,7 +225,7 @@ const HeroSection = () => {
               }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
             >
-              <Link href="/portfolio">
+              <Link href="/blog">
                 <Button
                   size="lg"
                   className="
@@ -244,7 +244,7 @@ const HeroSection = () => {
                 >
                   {/* 内部光效 */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative z-10">查看作品</span>
+                  <span className="relative z-10">我的博客</span>
                 </Button>
               </Link>
               <Link href="/contact">

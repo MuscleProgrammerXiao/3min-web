@@ -1,14 +1,22 @@
-'use client';
+"use client";
 
-import { useState, useEffect, use } from 'react';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { Calendar, Clock, ArrowLeft, Share2, Tag, User, ChevronUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { BlogPost } from '@/lib/types/blog';
-import BlogContent from '@/components/blog/BlogContent';
-import { mockPosts } from '@/lib/mock/blog';
+import { useState, useEffect, use } from "react";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import {
+  Calendar,
+  Clock,
+  ArrowLeft,
+  Share2,
+  Tag,
+  User,
+  ChevronUp,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { BlogPost } from "@/lib/types/blog";
+import BlogContent from "@/components/blog/BlogContent";
+import { useBlogStore } from "@/lib/stores/blog";
 
 interface BlogDetailPageProps {
   params: Promise<{
@@ -18,6 +26,7 @@ interface BlogDetailPageProps {
 
 export default function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { slug } = use(params);
+  const posts = useBlogStore(state => state.posts);
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,52 +35,46 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
   // 监听滚动事件
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
       setShowScrollTop(scrollTop > 300); // 滚动超过300px时显示按钮
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // 滚动到顶部函数
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
   useEffect(() => {
-    // 模拟API调用
-    const fetchPost = async () => {
-      setIsLoading(true);
-      
-      // 查找对应的文章
-      const foundPost = mockPosts.find(p => p.slug === slug);
-      
-      if (!foundPost) {
-        notFound();
-        return;
-      }
-      
-      setPost(foundPost);
-      
-      // 获取相关文章（同分类或同标签）
-      const related = mockPosts
-        .filter(p => 
-          p.id !== foundPost.id && 
-          (p.category === foundPost.category || 
-           p.tags.some(tag => foundPost.tags.includes(tag)))
-        )
-        .slice(0, 3);
-      
-      setRelatedPosts(related);
-      setIsLoading(false);
-    };
+    setIsLoading(true);
 
-    fetchPost();
-  }, [slug]);
+    const foundPost = posts.find(p => p.slug === slug);
+    if (!foundPost) {
+      notFound();
+      return;
+    }
+
+    setPost(foundPost);
+
+    const related = posts
+      .filter(
+        p =>
+          p.id !== foundPost.id &&
+          (p.category === foundPost.category ||
+            p.tags.some(tag => foundPost.tags.includes(tag)))
+      )
+      .slice(0, 3);
+
+    setRelatedPosts(related);
+    setIsLoading(false);
+  }, [slug, posts]);
 
   if (isLoading) {
     return (
@@ -99,7 +102,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
     <div className="min-h-screen bg-gray-50 py-8 md:py-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 返回按钮 */}
-        <div className="my-6 md:my-8">
+        <div className="mt-12 mb-3 md:my-8">
           <Link href="/blog">
             <Button variant="outline" size="sm" className="group">
               <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
@@ -113,13 +116,16 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
         <article className="bg-white rounded-lg shadow-sm p-4 md:p-6 lg:p-8 mb-6 md:mb-8">
           {/* 分类和标签 */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800 w-fit">
+            <Badge
+              variant="secondary"
+              className="bg-blue-100 text-blue-800 w-fit"
+            >
               {post.category}
             </Badge>
             <div className="flex items-center gap-2">
               <Tag className="h-4 w-4 text-gray-400" />
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
+                {post.tags.map(tag => (
                   <Badge key={tag} variant="outline" className="text-sm">
                     {tag}
                   </Badge>
@@ -141,12 +147,16 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <span className="hidden sm:inline">{new Date(post.date).toLocaleDateString('zh-CN', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}</span>
-              <span className="sm:hidden">{new Date(post.date).toLocaleDateString('zh-CN')}</span>
+              <span className="hidden sm:inline">
+                {new Date(post.date).toLocaleDateString("zh-CN", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+              <span className="sm:hidden">
+                {new Date(post.date).toLocaleDateString("zh-CN")}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
@@ -160,22 +170,27 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
 
           {/* 文章内容 */}
           <div className="prose prose-sm md:prose-lg max-w-none">
-            <BlogContent content={post.content || ''} />
+            <BlogContent content={post.content || ""} />
           </div>
         </article>
 
         {/* 相关文章 */}
         {relatedPosts.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 lg:p-8">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">相关文章</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
+              相关文章
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-              {relatedPosts.map((relatedPost) => (
-                <div key={relatedPost.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+              {relatedPosts.map(relatedPost => (
+                <div
+                  key={relatedPost.id}
+                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
                   <Badge variant="outline" className="mb-3">
                     {relatedPost.category}
                   </Badge>
                   <h3 className="font-semibold mb-2 line-clamp-2 text-sm md:text-base">
-                    <Link 
+                    <Link
                       href={`/blog/${relatedPost.slug}`}
                       className="hover:text-blue-600 transition-colors"
                     >
@@ -186,7 +201,9 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
                     {relatedPost.excerpt}
                   </p>
                   <div className="flex items-center gap-3 md:gap-4 text-xs text-gray-500">
-                    <span>{new Date(relatedPost.date).toLocaleDateString('zh-CN')}</span>
+                    <span>
+                      {new Date(relatedPost.date).toLocaleDateString("zh-CN")}
+                    </span>
                     <span>{relatedPost.readTime}</span>
                   </div>
                 </div>
@@ -195,7 +212,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
           </div>
         )}
       </div>
-      
+
       {/* 回到顶部按钮 */}
       {showScrollTop && (
         <button
