@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback, useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
-import { projects, categoryMap } from "@/lib/constants/portfolio";
+import { projects, categoryMap, categories } from "@/lib/constants/portfolio";
 import { ScrollProgress } from "@/components/common";
 import {
   CategoryFilter,
@@ -17,7 +17,9 @@ const PROJECTS_PER_PAGE = 3;
 
 export default function PortfolioPage() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>("全部");
+  const [selectedCategory, setSelectedCategory] = useState<
+    (typeof categories)[number]
+  >(categories[0]);
   const [currentPage, setCurrentPage] = useState(1);
   const [typingComplete, setTypingComplete] = useState(false);
 
@@ -35,11 +37,8 @@ export default function PortfolioPage() {
 
   // 使用useMemo优化过滤逻辑
   const filteredProjects = useMemo(() => {
-    const mappedCategory =
-      categoryMap[selectedCategory as keyof typeof categoryMap];
-    if (mappedCategory === null) {
-      return projects;
-    }
+    const mappedCategory = categoryMap[selectedCategory];
+    if (mappedCategory === null) return projects;
     return projects.filter(project => project.category === mappedCategory);
   }, [selectedCategory]);
 
@@ -67,7 +66,7 @@ export default function PortfolioPage() {
 
   // 使用useCallback优化分类变化处理
   const handleCategoryChange = useCallback((category: string) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category as (typeof categories)[number]);
     setCurrentPage(1); // 重置到第一页
   }, []);
 

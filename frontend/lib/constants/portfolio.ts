@@ -17,35 +17,25 @@ export const projects: Project[] = [
     id: 1,
     title: "AI智能报表录取",
     description:
-      "通过ai识别财务报表，将报表信息自动填入财报模版，极大提升财报录入效率。",
+      "为实现降本增效，提升客户经理日常手工操作效率，通过对业务流程的拆分与整合，结合OCR技术，开发了AI智能报表录取系统，此系统为案例版本",
     category: "web",
     technologies: [
       "React",
       "react-konva",
       "TypeScript",
       "Zustand",
-      "Ant Design Pro",
-      "UmiJS 4.0",
-      "react-zoom-pan-pinch",
+      "UmiJS",
+      "OCR",
     ],
     githubUrl: "https://github.com/MuscleProgrammerXiao",
     liveUrl: "http://116.205.176.83:8080/ocr-report",
     image: "/images/fsr.png",
   },
   {
-    id: 2,
-    title: "电商管理系统",
-    description: "基于React和Node.js的全栈电商管理平台，支持商品管理、订单处理、用户管理等功能。",
-    category: "web",
-    technologies: ["React", "Node.js", "MongoDB", "Express", "TypeScript"],
-    githubUrl: "https://github.com/MuscleProgrammerXiao",
-    liveUrl: "#",
-    image: "/images/ecommerce.png",
-  },
-  {
     id: 3,
     title: "移动端社交应用",
-    description: "基于React Native开发的社交应用，支持实时聊天、动态发布、好友管理等功能。",
+    description:
+      "基于React Native开发的社交应用，支持实时聊天、动态发布、好友管理等功能。",
     category: "mobile",
     technologies: ["React Native", "Firebase", "Redux", "TypeScript"],
     githubUrl: "https://github.com/MuscleProgrammerXiao",
@@ -55,7 +45,8 @@ export const projects: Project[] = [
   {
     id: 4,
     title: "企业官网设计",
-    description: "现代化企业官网UI/UX设计，注重用户体验和视觉效果，响应式设计适配多端。",
+    description:
+      "现代化企业官网UI/UX设计，注重用户体验和视觉效果，响应式设计适配多端。",
     category: "design",
     technologies: ["Figma", "Adobe XD", "Photoshop", "Illustrator"],
     githubUrl: "https://github.com/MuscleProgrammerXiao",
@@ -65,7 +56,8 @@ export const projects: Project[] = [
   {
     id: 5,
     title: "数据可视化平台",
-    description: "基于D3.js和Chart.js的数据可视化平台，支持多种图表类型和实时数据更新。",
+    description:
+      "基于D3.js和Chart.js的数据可视化平台，支持多种图表类型和实时数据更新。",
     category: "web",
     technologies: ["Vue.js", "D3.js", "Chart.js", "Python", "FastAPI"],
     githubUrl: "https://github.com/MuscleProgrammerXiao",
@@ -75,7 +67,8 @@ export const projects: Project[] = [
   {
     id: 6,
     title: "健身追踪应用",
-    description: "移动端健身追踪应用，支持运动记录、健康数据分析、个人训练计划制定。",
+    description:
+      "移动端健身追踪应用，支持运动记录、健康数据分析、个人训练计划制定。",
     category: "mobile",
     technologies: ["Flutter", "Dart", "SQLite", "Provider"],
     githubUrl: "https://github.com/MuscleProgrammerXiao",

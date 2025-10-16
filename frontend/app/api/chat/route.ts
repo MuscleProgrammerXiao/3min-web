@@ -21,7 +21,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const apiKey = process.env.SILICONFLOW_API_KEY;
+    // const apiKey = process.env.SILICONFLOW_API_KEY;sk-pghebkdpcrtqgaqvypiucowwtoqejbavumlnqgfzdvkvxutp
+    const apiKey = "sk-pghebkdpcrtqgaqvypiucowwtoqejbavumlnqgfzdvkvxutp";
     if (!apiKey) {
       return NextResponse.json(
         { error: "Missing API key" },
