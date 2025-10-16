@@ -1,12 +1,5 @@
 import { ElementType } from "react";
 
-export interface ChatMessage {
-  id: string;
-  content: string;
-  type: "user" | "ai";
-  timestamp: Date;
-}
-
 export interface AnimatedIconProps {
   icon: ElementType;
   className: string;
@@ -36,8 +29,4 @@ export interface ChatInputProps {
   isTyping: boolean;
   inputRef: React.RefObject<HTMLInputElement>;
   shouldFocusOnSuggestion?: boolean; // 建议点击后是否聚焦输入框，默认 true
-}
-
-export interface AIResponse {
-  [key: string]: string;
 }

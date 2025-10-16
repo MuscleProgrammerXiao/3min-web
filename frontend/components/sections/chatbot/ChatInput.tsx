@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Send, User } from "lucide-react";
 import { ChatInputProps } from "./types";
-import { suggestions } from "./data";
+import { suggestions } from "@/lib/prompts/chatbot";
 import { itemVariants } from "./animations";
 
 const ChatInput = ({

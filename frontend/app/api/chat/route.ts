@@ -31,9 +31,28 @@ export async function POST(req: Request) {
 
     // 基于用户消息做轻量知识库检索（来自 tishici 拆分文档），仅用于聚焦上下文
     const kbHits = searchKB(message, 5);
-    const useful = kbHits.filter((h) => h.score > 0.12);
+    const useful = kbHits.filter(h => h.score > 0.12);
+    const matchedKeys = useful.map(h => h.key);
+    const shouldAddExpansion = matchedKeys.some(k =>
+      ["职业技能", "其他技能"].includes(k)
+    );
+    const expansionGuide = shouldAddExpansion
+      ? [
+          "拓展指引（通用方法，非个人事实）：",
+          "- 需求澄清与用户研究：目标、角色、关键任务与场景",
+          "- 信息架构与任务流程：导航层级、路径与可发现性",
+          "- 线框与交互细节：状态、反馈、可见性与一致性",
+          "- 视觉设计与设计系统：排版、色彩、组件库与规范",
+          "- 可用性测试与迭代：度量、问题定位、改进闭环",
+          "注意：仅提供行业通用方法，不得编造新的个人经历或数字。",
+        ].join("\n")
+      : "";
     const kbContext = useful.length
-      ? useful.map((h) => `- ${h.key}：${h.content}`).join("\n")
+      ? [
+          useful.map(h => `- ${h.key}：${h.content}`).join("\n"),
+          expansionGuide ? "" : "",
+          expansionGuide,
+        ].join("\n")
       : undefined;
 
     const url = "https://api.siliconflow.cn/v1/chat/completions";

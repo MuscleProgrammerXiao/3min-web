@@ -1,94 +1,8 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Mail, Send, Phone } from 'lucide-react'
-import { ContactService } from '@/lib/api'
-import type { ContactFormData } from '@/lib/api'
+import { Mail, Phone, Download } from "lucide-react";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    phone: '',
-    subject: '',
-    message: ''
-  })
-  
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<{
-    type: 'success' | 'error' | null;
-    message: string;
-  }>({ type: null, message: '' })
-  const [phoneError, setPhoneError] = useState('')
-
-  // 手机号验证函数
-  const validatePhone = (phone: string): boolean => {
-    const phoneRegex = /^1[3-9]\d{9}$/
-    return phoneRegex.test(phone)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus({ type: null, message: '' })
-    setPhoneError('')
-    
-    // 前端验证手机号
-    if (!validatePhone(formData.phone)) {
-      setPhoneError('请输入正确的手机号格式（11位数字，以1开头）')
-      setIsSubmitting(false)
-      return
-    }
-    
-    try {
-      const result = await ContactService.sendMessage(formData)
-      
-      if (result.success) {
-        setSubmitStatus({
-          type: 'success',
-          message: result.message
-        })
-        // 清空表单
-        setFormData({
-          name: '',
-          phone: '',
-          subject: '',
-          message: ''
-        })
-      } else {
-        setSubmitStatus({
-          type: 'error',
-          message: result.message
-        })
-      }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : '网络错误，请检查后端服务是否启动'
-      setSubmitStatus({
-        type: 'error',
-        message: errorMessage
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value
-    })
-    
-    // 实时验证手机号
-    if (name === 'phone') {
-      if (value && !validatePhone(value)) {
-        setPhoneError('请输入正确的手机号格式')
-      } else {
-        setPhoneError('')
-      }
-    }
-  }
-
   return (
     <div className="pt-22">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,127 +15,95 @@ export default function ContactPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Contact Info */}
+          {/* 联系方式 */}
           <div>
             <h2 className="text-2xl font-semibold mb-6">联系方式</h2>
-            
             <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <Mail className=" h-5 w-5 text-blue-600" />
-                <span className='hover:text-blue-600 transition-colors'>895422334@qq.com</span>
-              </div>
-              
-              <div className="flex items-center gap-3">
+              <a
+                href="mailto:895422334@qq.com"
+                className="flex items-center gap-3 hover:text-blue-600 transition-colors"
+              >
+                <Mail className="h-5 w-5 text-blue-600" />
+                895422334@qq.com
+              </a>
+              <a
+                href="tel:18598039775"
+                className="flex items-center gap-3 hover:text-blue-600 transition-colors"
+              >
                 <Phone className="h-5 w-5 text-blue-700" />
-                <span className="hover:text-blue-600 transition-colors">
-                  185 9803 9775
-                </span>
-              </div>
-            </div>
-            
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-3">关于我</h3>
-              <p className="text-gray-600 leading-relaxed">
-                我是一名热爱技术和产品的开发者，目前专注于前端开发和用户体验设计。
-                如果您有任何项目合作或技术交流的想法，欢迎随时联系我。
-              </p>
+                185 9803 9775
+              </a>
             </div>
           </div>
-
-          {/* Contact Form */}
+          {/* 关于我 */}
           <div>
-            <h2 className="text-2xl font-semibold mb-6">发送消息</h2>
-            
-            {/* 状态提示 */}
-            {submitStatus.type && (
-              <div className={`mb-4 p-3 rounded-md ${
-                submitStatus.type === 'success' 
-                  ? 'bg-green-50 text-green-700 border border-green-200' 
-                  : 'bg-red-50 text-red-700 border border-red-200'
-              }`}>
-                {submitStatus.message}
-              </div>
-            )}
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                  姓名
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                  手机号
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="请输入11位手机号"
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 ${
-                    phoneError ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                />
-                {phoneError && (
-                  <p className="mt-1 text-sm text-red-600">{phoneError}</p>
-                )}
-              </div>
-              
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-                  主题
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                  消息内容
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={5}
-                  disabled={isSubmitting}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                />
-              </div>
-              
-              <Button type="submit" className="w-full" disabled={isSubmitting || !!phoneError}>
-                <Send className="h-4 w-4 mr-2" />
-                {isSubmitting ? '发送中...' : '发送消息'}
-              </Button>
-            </form>
+            <h2 className="text-2xl font-semibold mb-6">关于我</h2>
+            <p className="text-gray-600 leading-relaxed">
+              我是一名前端开发工程师兼产品经理，擅长将业务目标与用户体验连接起来。
+            </p>
+            <p className="text-gray-600 leading-relaxed mt-3">
+              前端方向：专注
+              React/Next.js、组件化设计、工程化与性能优化、可访问性。
+              产品方向：负责需求分析、原型与交互设计、数据驱动迭代（指标埋点与
+              A/B 测试）、项目推进与跨团队协作。
+            </p>
+          </div>
+        </div>
+
+        {/* 更多信息 */}
+        <div className="mt-6 grid md:grid-cols-2 gap-12">
+          <div>
+            <h3 className="text-lg font-semibold mb-3">我能提供的帮助</h3>
+            <ul className="list-disc pl-5 text-gray-600 space-y-2">
+              <li>前端工程：React/Next.js、TypeScript、组件库搭建、SSR/SSG </li>
+              <li>交互与设计：信息架构、交互原型、设计系统落地</li>
+              <li>产品与增长：需求拆解、数据埋点与漏斗分析、转化提升</li>
+              <li>项目偏好：B 端系统、内容站、AI 辅助工具、数据可视化</li>
+            </ul>
+          </div>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            <a
+              href="/resume/frontend-developer.pdf"
+              className="inline-flex items-center justify-center gap-2 h-10 md:h-11 px-4 rounded-md bg-black text-white hover:bg-gray-900 text-sm md:text-base md:min-w-[180px]"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              aria-label="下载前端开发简历PDF"
+            >
+              <Download className="h-4 w-4" /> 前端开发简历（PDF）
+            </a>
+            <a
+              href="/resume/product-manager.pdf"
+              className="inline-flex items-center justify-center gap-2 h-10 md:h-11 px-4 rounded-md bg-black text-white hover:bg-gray-900 text-sm md:text-base md:min-w-[180px]"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+              aria-label="下载产品经理简历PDF"
+            >
+              <Download className="h-4 w-4" /> 产品经理简历（PDF）
+            </a>
+          </div>
+        </div>
+
+        {/* 快速联系 CTA */}
+        <div className="my-12 rounded-lg border p-5 bg-gray-50 text-gray-700 shadow-sm">
+          <p className="mb-4 text-base font-semibold">更快联系</p>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            <a
+              href="mailto:895422334@qq.com?subject=合作咨询"
+              className="inline-flex items-center justify-center gap-2 h-10 md:h-11 px-4 rounded-md bg-blue-600 text-white hover:bg-blue-700 text-sm md:text-base md:min-w-[180px]"
+            >
+              <Mail className="h-4 w-4" /> 邮件联系
+            </a>
+            <a
+              href="tel:18598039775"
+              className="inline-flex items-center justify-center gap-2 h-10 md:h-11 px-4 rounded-md border border-gray-300 hover:bg-gray-100 text-sm md:text-base md:min-w-[180px]"
+            >
+              <Phone className="h-4 w-4" /> 电话联系
+            </a>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

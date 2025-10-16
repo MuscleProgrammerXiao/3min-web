@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion'
 import { Bot, Sparkles, Heart, Star } from 'lucide-react'
 import { bubbleVariants, avatarVariants } from './animations'
-import { welcomeMessage } from './data'
+import { welcomeMessage } from '@/lib/prompts/chatbot'
 import AnimatedIcon from './AnimatedIcon'
 import BubbleDecoration from './BubbleDecoration'
 import FloatingDecoration from './FloatingDecoration'
