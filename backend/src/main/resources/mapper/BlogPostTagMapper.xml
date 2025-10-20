@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loong.blog.mapper.BlogPostTagMapper">
+
+    <resultMap id="BaseResultMap" type="com.loong.blog.model.entity.BlogPostTag">
+            <result property="postId" column="post_id" jdbcType="INTEGER"/>
+            <result property="tagId" column="tag_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        post_id,tag_id
+    </sql>
+    
+    <insert id="batchInsert">
+        INSERT INTO blog_post_tags (post_id, tag_id)
+        VALUES
+        <foreach collection="tagIds" item="tagId" separator=",">
+            (#{postId}, #{tagId})
+        </foreach>
+    </insert>
+    
+    <delete id="deleteByPostId">
+        DELETE FROM blog_post_tags
+        WHERE post_id = #{postId}
+    </delete>
+    
+    <select id="getPostIdsByTagId" resultType="java.lang.Integer">
+        SELECT post_id
+        FROM blog_post_tags
+        WHERE tag_id = #{tagId}
+    </select>
+</mapper>

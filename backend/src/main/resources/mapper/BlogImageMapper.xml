@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loong.blog.mapper.BlogImageMapper">
+
+    <resultMap id="BaseResultMap" type="com.loong.blog.model.entity.BlogImage">
+        <id property="id" column="id" />
+        <result property="postId" column="post_id" />
+        <result property="url" column="url" />
+        <result property="altText" column="alt_text" />
+        <result property="caption" column="caption" />
+        <result property="displayOrder" column="display_order" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, post_id, url, alt_text, caption, display_order, created_at
+    </sql>
+
+    <!-- 根据文章ID获取图片列表（按显示顺序、ID升序） -->
+    <select id="getImagesByPostId" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM blog_images
+        WHERE post_id = #{postId}
+        ORDER BY display_order ASC, id ASC
+    </select>
+
+</mapper>
